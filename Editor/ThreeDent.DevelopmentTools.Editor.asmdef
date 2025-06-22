@@ -1,0 +1,19 @@
+{
+    "name": "ThreeDent.DevelopmentTools.Editor",
+    "rootNamespace": "ThreeDent.DevelopmentTools.Editor",
+    "references": [
+        "GUID:6be00617ce03047a99c7517cf89fc338",
+        "GUID:f9bcf692edd084d22bb2f2ba4aae20c0"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
