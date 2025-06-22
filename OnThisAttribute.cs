@@ -1,4 +1,7 @@
 using System;
 
-[AttributeUsage(AttributeTargets.Field)]
-public class OnThisAttribute : Attribute {}
+namespace ThreeDent.DevelopmentTools
+{
+    [AttributeUsage(AttributeTargets.Field)]
+    public class OnThisAttribute : Attribute { }
+}

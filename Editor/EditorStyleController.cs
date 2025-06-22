@@ -1,16 +1,18 @@
-using System;
 using UnityEditor;
 using UnityEngine;
 
-public class EditorStyleController : ScriptableSingleton<EditorStyleController>
+namespace ThreeDent.DevelopmentTools.Editor
 {
-    [SerializeField] private bool useCustomMonoBehaviourEditor = true;
-
-    public static bool UseCustomMonoBehaviourEditor => instance.useCustomMonoBehaviourEditor;
-
-    [MenuItem("Custom Editor/Switch usage of custom mono behaviour editor")]
-    private static void Switch() 
+    public class EditorStyleController : ScriptableSingleton<EditorStyleController>
     {
-        instance.useCustomMonoBehaviourEditor = !instance.useCustomMonoBehaviourEditor;
+        [SerializeField] private bool useCustomMonoBehaviourEditor = true;
+
+        public static bool UseCustomMonoBehaviourEditor => instance.useCustomMonoBehaviourEditor;
+
+        [MenuItem("Custom Editor/Switch usage of custom mono behaviour editor")]
+        private static void Switch()
+        {
+            instance.useCustomMonoBehaviourEditor = !instance.useCustomMonoBehaviourEditor;
+        }
     }
 }
