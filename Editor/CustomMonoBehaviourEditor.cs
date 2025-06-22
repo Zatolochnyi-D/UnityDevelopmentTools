@@ -19,7 +19,7 @@ namespace ThreeDent.DevelopmentTools.Editor
 
         protected virtual void OnEnable()
         {
-            if (!EditorStyleController.UseCustomMonoBehaviourEditor)
+            if (!CustomMonoBehaviourEditorUsageController.UseCustomMonoBehaviourEditor)
                 return;
 
             var fields = target.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
@@ -35,9 +35,9 @@ namespace ThreeDent.DevelopmentTools.Editor
 
         private void HandleOnThisAttribute(FieldInfo field)
         {
+            // Check that field object is derived from Component, that's the only type that can be attached to GameObject.
             if (typeof(Component).IsAssignableFrom(field.FieldType))
             {
-                // Check that field object is derived from Component, that's the only type that can be attached to GameObject.
                 var property = serializedObject.FindProperty(field.Name);
                 if (((MonoBehaviour)target).gameObject.TryGetComponent(field.FieldType, out var component))
                 {
@@ -54,7 +54,7 @@ namespace ThreeDent.DevelopmentTools.Editor
 
         public override void OnInspectorGUI()
         {
-            if (EditorStyleController.UseCustomMonoBehaviourEditor)
+            if (CustomMonoBehaviourEditorUsageController.UseCustomMonoBehaviourEditor)
             {
                 foreach (var message in warningMessages)
                     EditorGUILayout.HelpBox(message, MessageType.Warning);

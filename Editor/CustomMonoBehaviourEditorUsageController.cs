@@ -3,13 +3,13 @@ using UnityEngine;
 
 namespace ThreeDent.DevelopmentTools.Editor
 {
-    public class EditorStyleController : ScriptableSingleton<EditorStyleController>
+    public class CustomMonoBehaviourEditorUsageController : ScriptableSingleton<CustomMonoBehaviourEditorUsageController>
     {
         [SerializeField] private bool useCustomMonoBehaviourEditor = true;
 
         public static bool UseCustomMonoBehaviourEditor => instance.useCustomMonoBehaviourEditor;
 
-        [MenuItem("Custom Editor/Switch usage of custom mono behaviour editor")]
+        [MenuItem("Custom MB Editor/Switch between custom and default editors")]
         private static void Switch()
         {
             instance.useCustomMonoBehaviourEditor = !instance.useCustomMonoBehaviourEditor;
