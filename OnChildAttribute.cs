@@ -3,18 +3,18 @@ using System;
 namespace ThreeDent.DevelopmentTools
 {
     [AttributeUsage(AttributeTargets.Field)]
-    public class OnThisAttribute : Attribute
+    public class OnChildAttribute : Attribute
     {
         private readonly int offset;
 
         public int Offset => offset;
 
-        public OnThisAttribute()
+        public OnChildAttribute()
         {
             offset = 0;
         }
 
-        public OnThisAttribute(int offset)
+        public OnChildAttribute(int offset)
         {
             this.offset = offset;
         }
