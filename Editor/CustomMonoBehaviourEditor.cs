@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 using UnityEditor;
@@ -16,38 +15,24 @@ namespace ThreeDent.DevelopmentTools.Editor
     [CustomEditor(typeof(MonoBehaviour), true)]
     public class CustomMonoBehaviourEditor : UnityEditor.Editor
     {
-        private List<string> warningMessages;
-        private IEnumerable<SerializedProperty> properties;
         private GameObject gameObject;
-        private VisualElement root;
 
-        private void CollectProperties()
+        private static bool HasRequiredAttribute(MemberInfo x)
         {
-            if (!CustomMonoBehaviourEditorUsageController.UseCustomMonoBehaviourEditor)
-                return;
-
-            warningMessages = new();
-
-            var fields = target.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            var serializableFields = fields.Where(x => x.IsPublic || x.IsDefined<SerializeField>());
-            static bool hasRequiredAttributes(MemberInfo x) => x.IsDefined<OnThisAttribute>() || x.IsDefined<OnChildAttribute>();
-            var fieldsWithAttribute = serializableFields.Where(hasRequiredAttributes);
-            var fieldsWithoutAttribute = serializableFields.Where(x => !hasRequiredAttributes(x));
-
-            // OnThis, OnChild looks for components on game object, so type of fields with those attributes should derive from Component.
-            var fieldsWithProperlyUsedAttribute = fieldsWithAttribute.Where(x => x.FieldType.IsAssignableTo<Component>());
-            foreach (var field in fieldsWithProperlyUsedAttribute)
-            {
-                if (field.IsDefined<OnThisAttribute>())
-                    HandleOnThisAttribute(field);
-                else if (field.IsDefined<OnChildAttribute>())
-                    HandleOnChildAttribute(field);
-            }
-
-            properties = fieldsWithoutAttribute.Select(x => serializedObject.FindProperty(x.Name));
+            return x.IsDefined<OnThisAttribute>() || x.IsDefined<OnChildAttribute>();
         }
 
-        private void HandleOnThisAttribute(FieldInfo field)
+        private void AddFieldsWithoutAttributes(VisualElement root)
+        {
+            var fields = target.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            var serializableFields = fields.Where(x => x.IsPublic || x.IsDefined<SerializeField>());
+            var fieldsWithoutAttribute = serializableFields.Where(x => !HasRequiredAttribute(x));
+            var properties = fieldsWithoutAttribute.Select(x => serializedObject.FindProperty(x.Name));
+            foreach (var property in properties)
+                root.Add(new PropertyField(property));
+        }
+
+        private void HandleOnThisAttribute(VisualElement root, FieldInfo field)
         {
             var property = serializedObject.FindProperty(field.Name);
             property.objectReferenceValue = null;
@@ -55,71 +40,58 @@ namespace ThreeDent.DevelopmentTools.Editor
             if (gameObject.TryGetComponent(field.FieldType, out var component))
                 property.objectReferenceValue = component;
             else
-                warningMessages.Add($@"This script requires component ""{field.FieldType.Name}"" to be present on this object.");
-                
+                root.Add(new HelpBox($@"This script requires component ""{field.FieldType.Name}"" to be present on this object.", HelpBoxMessageType.Warning));
+
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void HandleOnChildAttribute(FieldInfo field)
+        private void HandleOnChildAttribute(VisualElement root, FieldInfo field)
         {
             var property = serializedObject.FindProperty(field.Name);
+            property.objectReferenceValue = null;
 
-            if (gameObject.transform.childCount == 0)
-            {
-                property.objectReferenceValue = null;
-                warningMessages.Add($@"This script requires component ""{field.FieldType.Name}"" to be present on one of its children.");
-            }
             foreach (Transform child in gameObject.transform)
-            {
                 if (child.TryGetComponent(field.FieldType, out var component))
-                {
                     property.objectReferenceValue = component;
-                }
-                else
-                {
-                    property.objectReferenceValue = null;
-                    warningMessages.Add($@"This script requires component ""{field.FieldType.Name}"" to be present on one of its children.");
-                }
-            }
+
+            if (property.objectReferenceValue == null)
+                root.Add(new HelpBox($@"This script requires component ""{field.FieldType.Name}"" to be present on one of its children.", HelpBoxMessageType.Warning));
+
             serializedObject.ApplyModifiedProperties();
         }
 
-        protected virtual void OnEnable()
+        protected void HandleCustomAttributes(VisualElement root)
         {
-            gameObject = ((MonoBehaviour)target).gameObject;
-            CollectProperties();
+            if (!CustomMonoBehaviourEditorUsageController.UseCustomMonoBehaviourEditor)
+                return;
+            var fields = target.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            var serializableFields = fields.Where(x => x.IsPublic || x.IsDefined<SerializeField>());
+            var fieldsWithAttribute = serializableFields.Where(HasRequiredAttribute);
+            var fieldsWithProperlyUsedAttribute = fieldsWithAttribute.Where(x => x.FieldType.IsAssignableTo<Component>());
+
+            foreach (var field in fieldsWithProperlyUsedAttribute)
+            {
+                if (field.IsDefined<OnThisAttribute>())
+                    HandleOnThisAttribute(root, field);
+                else if (field.IsDefined<OnChildAttribute>())
+                    HandleOnChildAttribute(root, field);
+            }
         }
 
         public override VisualElement CreateInspectorGUI()
         {
-            root = new VisualElement();
-            foreach (var message in warningMessages)
-                root.Add(new HelpBox(message, HelpBoxMessageType.Warning));
-            foreach (var property in properties)
-                root.Add(new PropertyField(property));
-            return root;
+            if (CustomMonoBehaviourEditorUsageController.UseCustomMonoBehaviourEditor)
+            {
+                var root = new VisualElement();
+                gameObject = ((MonoBehaviour)target).gameObject;
+                HandleCustomAttributes(root);
+                AddFieldsWithoutAttributes(root);
+                return root;
+            }
+            else
+            {
+                return null;
+            }
         }
-
-        public void Redraw()
-        {
-            CollectProperties();
-        }
-
-        // public override void OnInspectorGUI()
-        // {
-        //     Debug.Log("B");
-        //     if (CustomMonoBehaviourEditorUsageController.UseCustomMonoBehaviourEditor)
-        //     {
-        //         foreach (var message in warningMessages)
-        //             EditorGUILayout.HelpBox(message, MessageType.Warning);
-        //         foreach (var property in properties)
-        //             EditorGUILayout.PropertyField(property);
-        //         serializedObject.ApplyModifiedProperties();
-        //     }
-        //     else
-        //     {
-        //         base.OnInspectorGUI();
-        //     }
-        // }
     }
 }

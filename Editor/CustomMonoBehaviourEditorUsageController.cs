@@ -13,9 +13,6 @@ namespace ThreeDent.DevelopmentTools.Editor
         private static void Switch()
         {
             instance.useCustomMonoBehaviourEditor = !instance.useCustomMonoBehaviourEditor;
-            var editors = Resources.FindObjectsOfTypeAll<CustomMonoBehaviourEditor>();
-            foreach (var editor in editors)
-                editor.Redraw();
         }
     }
 }
