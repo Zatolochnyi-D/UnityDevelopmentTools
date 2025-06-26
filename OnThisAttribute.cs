@@ -3,20 +3,5 @@ using System;
 namespace ThreeDent.DevelopmentTools
 {
     [AttributeUsage(AttributeTargets.Field)]
-    public class OnThisAttribute : Attribute
-    {
-        private readonly int offset;
-
-        public int Offset => offset;
-
-        public OnThisAttribute()
-        {
-            offset = 0;
-        }
-
-        public OnThisAttribute(int offset)
-        {
-            this.offset = offset;
-        }
-    }
+    public class OnThisAttribute : Attribute { }
 }

@@ -4,6 +4,8 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using ThreeDent.Helpers.Extensions;
+using UnityEngine.UIElements;
+using UnityEditor.UIElements;
 
 namespace ThreeDent.DevelopmentTools.Editor
 {
@@ -14,104 +16,110 @@ namespace ThreeDent.DevelopmentTools.Editor
     [CustomEditor(typeof(MonoBehaviour), true)]
     public class CustomMonoBehaviourEditor : UnityEditor.Editor
     {
-        private readonly List<string> warningMessages = new();
+        private List<string> warningMessages;
         private IEnumerable<SerializedProperty> properties;
         private GameObject gameObject;
+        private VisualElement root;
 
         private void CollectProperties()
         {
             if (!CustomMonoBehaviourEditorUsageController.UseCustomMonoBehaviourEditor)
                 return;
 
+            warningMessages = new();
+
             var fields = target.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             var serializableFields = fields.Where(x => x.IsPublic || x.IsDefined<SerializeField>());
+            static bool hasRequiredAttributes(MemberInfo x) => x.IsDefined<OnThisAttribute>() || x.IsDefined<OnChildAttribute>();
+            var fieldsWithAttribute = serializableFields.Where(hasRequiredAttributes);
+            var fieldsWithoutAttribute = serializableFields.Where(x => !hasRequiredAttributes(x));
 
-            static bool haveRequiredAttribute(MemberInfo x)
+            // OnThis, OnChild looks for components on game object, so type of fields with those attributes should derive from Component.
+            var fieldsWithProperlyUsedAttribute = fieldsWithAttribute.Where(x => x.FieldType.IsAssignableTo<Component>());
+            foreach (var field in fieldsWithProperlyUsedAttribute)
             {
-                return x.IsDefined<OnThisAttribute>() || x.IsDefined<OnChildAttribute>();
-            }
-            var fieldsByAttributesPresence = serializableFields.GroupBy(haveRequiredAttribute);
-
-            foreach (var fieldWithAttribute in fieldsByAttributesPresence.Where(x => x.Key).SelectMany(x => x))
-            {
-                if (fieldWithAttribute.IsDefined<OnThisAttribute>())
-                    HandleOnThisAttribute(fieldWithAttribute);
-                else if (fieldWithAttribute.IsDefined<OnChildAttribute>())
-                    HandleOnChildAttribute(fieldWithAttribute);
+                if (field.IsDefined<OnThisAttribute>())
+                    HandleOnThisAttribute(field);
+                else if (field.IsDefined<OnChildAttribute>())
+                    HandleOnChildAttribute(field);
             }
 
-            properties = fieldsByAttributesPresence.Where(x => !x.Key).SelectMany(x => x).Select(x => serializedObject.FindProperty(x.Name));
-        }
-
-        protected virtual void OnEnable()
-        {
-            CollectProperties();
-            gameObject = ((MonoBehaviour)target).gameObject;
+            properties = fieldsWithoutAttribute.Select(x => serializedObject.FindProperty(x.Name));
         }
 
         private void HandleOnThisAttribute(FieldInfo field)
         {
-            // Check that field object is derived from Component, that's the only type that can be attached to GameObject.
-            if (typeof(Component).IsAssignableFrom(field.FieldType))
+            var property = serializedObject.FindProperty(field.Name);
+            property.objectReferenceValue = null;
+
+            if (gameObject.TryGetComponent(field.FieldType, out var component))
+                property.objectReferenceValue = component;
+            else
+                warningMessages.Add($@"This script requires component ""{field.FieldType.Name}"" to be present on this object.");
+                
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void HandleOnChildAttribute(FieldInfo field)
+        {
+            var property = serializedObject.FindProperty(field.Name);
+
+            if (gameObject.transform.childCount == 0)
             {
-                var property = serializedObject.FindProperty(field.Name);
-                if (((MonoBehaviour)target).gameObject.TryGetComponent(field.FieldType, out var component))
+                property.objectReferenceValue = null;
+                warningMessages.Add($@"This script requires component ""{field.FieldType.Name}"" to be present on one of its children.");
+            }
+            foreach (Transform child in gameObject.transform)
+            {
+                if (child.TryGetComponent(field.FieldType, out var component))
                 {
                     property.objectReferenceValue = component;
                 }
                 else
                 {
                     property.objectReferenceValue = null;
-                    warningMessages.Add($@"This script requires component ""{field.FieldType.Name}"" to be present on this object.");
-                }
-                serializedObject.ApplyModifiedProperties();
-            }
-        }
-
-        private void HandleOnChildAttribute(FieldInfo field)
-        {
-            // Check that field object is derived from Component, that's the only type that can be attached to GameObject.
-            if (typeof(Component).IsAssignableFrom(field.FieldType))
-            {
-                var property = serializedObject.FindProperty(field.Name);
-
-                if (gameObject.transform.childCount == 0)
-                {
-                    property.objectReferenceValue = null;
                     warningMessages.Add($@"This script requires component ""{field.FieldType.Name}"" to be present on one of its children.");
                 }
-                foreach (Transform child in gameObject.transform)
-                {
-                    if (child.TryGetComponent(field.FieldType, out var component))
-                    {
-                        property.objectReferenceValue = component;
-                    }
-                    else
-                    {
-                        property.objectReferenceValue = null;
-                        warningMessages.Add($@"This script requires component ""{field.FieldType.Name}"" to be present on one of its children.");
-                    }
-                }
-
-                serializedObject.ApplyModifiedProperties();
             }
+            serializedObject.ApplyModifiedProperties();
         }
 
-        public override void OnInspectorGUI()
+        protected virtual void OnEnable()
         {
-            Debug.Log("B");
-            if (CustomMonoBehaviourEditorUsageController.UseCustomMonoBehaviourEditor)
-            {
-                foreach (var message in warningMessages)
-                    EditorGUILayout.HelpBox(message, MessageType.Warning);
-                foreach (var property in properties)
-                    EditorGUILayout.PropertyField(property);
-                serializedObject.ApplyModifiedProperties();
-            }
-            else
-            {
-                base.OnInspectorGUI();
-            }
+            gameObject = ((MonoBehaviour)target).gameObject;
+            CollectProperties();
         }
+
+        public override VisualElement CreateInspectorGUI()
+        {
+            root = new VisualElement();
+            foreach (var message in warningMessages)
+                root.Add(new HelpBox(message, HelpBoxMessageType.Warning));
+            foreach (var property in properties)
+                root.Add(new PropertyField(property));
+            return root;
+        }
+
+        public void Redraw()
+        {
+            CollectProperties();
+        }
+
+        // public override void OnInspectorGUI()
+        // {
+        //     Debug.Log("B");
+        //     if (CustomMonoBehaviourEditorUsageController.UseCustomMonoBehaviourEditor)
+        //     {
+        //         foreach (var message in warningMessages)
+        //             EditorGUILayout.HelpBox(message, MessageType.Warning);
+        //         foreach (var property in properties)
+        //             EditorGUILayout.PropertyField(property);
+        //         serializedObject.ApplyModifiedProperties();
+        //     }
+        //     else
+        //     {
+        //         base.OnInspectorGUI();
+        //     }
+        // }
     }
 }
