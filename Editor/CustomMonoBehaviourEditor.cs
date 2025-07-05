@@ -21,6 +21,8 @@ namespace ThreeDent.DevelopmentTools.Editor
         private const string ComponentOnThisNotFoundMessage = "This script requires component \"{0}\" to be present on this object.";
         private const string ComponentOnThisIndexNotFoundMessage = "This script requires component \"{0}\" to be present on this object under index {1}.";
         private const string ComponentOnChildNotFoundMessage = "This script requires component \"{0}\" to be present on one of its children.";
+        private const string ChildNotFoundMessage = "This script requires this object to have a child.";
+        private const string ChildOnIndexNotFoundMessage = "This script requires this object to have a child undex index {0} ({1} traversing is used).";
 
         private GameObject gameObject;
 
@@ -106,6 +108,64 @@ namespace ThreeDent.DevelopmentTools.Editor
             serializedObject.ApplyModifiedProperties();
         }
 
+        private void HandleIsChildAttribute(VisualElement root, FieldInfo field)
+        {
+            if (!(field.FieldType.IsAssignableTo<GameObject>() || field.FieldType.IsAssignableTo<Transform>()))
+                return;
+
+            var property = serializedObject.FindProperty(field.Name);
+            property.objectReferenceValue = null;
+
+            var attribute = field.GetCustomAttribute<IsChildAttribute>();
+            var offset = attribute.Offset;
+            var mode = attribute.TraversingMode;
+
+            IEnumerable<Transform> children;
+            if (mode == TraversingMode.BFS)
+                children = GenericUnfoldingAlgos.UnfoldTreeWithBfs(gameObject.transform, ChildProvider, false);
+            else
+                children = GenericUnfoldingAlgos.UnfoldTreeWithDfs(gameObject.transform, ChildProvider, false);
+
+            if (children.Count() > offset)
+            {
+                var child = children.Skip(offset).First();
+                property.objectReferenceValue = field.FieldType.IsAssignableTo<GameObject>() ? child.gameObject : child;
+            }
+            else
+            {
+                if (offset == 0)
+                    root.Add(new HelpBox(string.Format(ChildNotFoundMessage), HelpBoxMessageType.Warning));
+                else
+                    root.Add(new HelpBox(string.Format(ChildOnIndexNotFoundMessage, offset, mode), HelpBoxMessageType.Warning));
+            }
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void HandleOnParentAttribute(VisualElement root, FieldInfo field)
+        {
+            if (!field.FieldType.IsAssignableTo<Component>())
+                return;
+
+            var property = serializedObject.FindProperty(field.Name);
+            property.objectReferenceValue = null;
+
+            
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
+        private void HandleIsParentAttribute(VisualElement root, FieldInfo field)
+        {
+            if (!(field.FieldType.IsAssignableTo<GameObject>() || field.FieldType.IsAssignableTo<Transform>()))
+                return;
+
+            var property = serializedObject.FindProperty(field.Name);
+            property.objectReferenceValue = null;
+
+            serializedObject.ApplyModifiedProperties();
+        }
+
         protected void HandleCustomAttributes(VisualElement root)
         {
             var fieldsWithAttribute = GetSerializableFields(target.GetType()).Where(HasRequiredAttribute);
@@ -116,12 +176,12 @@ namespace ThreeDent.DevelopmentTools.Editor
                     HandleOnThisAttribute(root, field);
                 else if (field.IsDefined<OnChildAttribute>())
                     HandleOnChildAttribute(root, field);
-                // else if (field.IsDefined<IsChildAttribute>())
-                //     HandleIsChildAttribute(root, field);
-                // else if (field.IsDefined<OnParentAttribute>())
-                //     HandleOnParentAttribute(root, field);
-                // else if (field.IsDefined<IsParentAttribute>())
-                //     HandleIsParentAttribute(root, field);
+                else if (field.IsDefined<IsChildAttribute>())
+                    HandleIsChildAttribute(root, field);
+                else if (field.IsDefined<OnParentAttribute>())
+                    HandleOnParentAttribute(root, field);
+                else if (field.IsDefined<IsParentAttribute>())
+                    HandleIsParentAttribute(root, field);
             }
         }
 
