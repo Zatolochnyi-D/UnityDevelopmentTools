@@ -14,7 +14,7 @@ namespace ThreeDent.DevelopmentTools
         private int offset;
         private OnChildTraversingMode traversingMode;
 
-        public int Index => offset;
+        public int Offset => offset;
         public OnChildTraversingMode TraversingMode => traversingMode;
 
         public OnChildAttribute(OnChildTraversingMode traversingMode = OnChildTraversingMode.BFS)

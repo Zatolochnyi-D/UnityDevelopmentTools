@@ -3,7 +3,8 @@
     "rootNamespace": "ThreeDent.DevelopmentTools.Editor",
     "references": [
         "GUID:6be00617ce03047a99c7517cf89fc338",
-        "GUID:f9bcf692edd084d22bb2f2ba4aae20c0"
+        "GUID:f9bcf692edd084d22bb2f2ba4aae20c0",
+        "GUID:460034d90b7d14e9eb8de85c34bc1e0e"
     ],
     "includePlatforms": [
         "Editor"

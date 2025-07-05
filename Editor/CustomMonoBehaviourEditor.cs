@@ -7,6 +7,7 @@ using UnityEngine;
 using ThreeDent.Helpers.Extensions;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
+using ThreeDent.Helpers.Utils;
 
 namespace ThreeDent.DevelopmentTools.Editor
 {
@@ -19,6 +20,7 @@ namespace ThreeDent.DevelopmentTools.Editor
     {
         private const string ComponentOnThisNotFoundMessage = "This script requires component \"{0}\" to be present on this object.";
         private const string ComponentOnThisIndexNotFoundMessage = "This script requires component \"{0}\" to be present on this object under index {1}.";
+        private const string ComponentOnChildNotFoundMessage = "This script requires component \"{0}\" to be present on one of its children.";
 
         private GameObject gameObject;
 
@@ -34,35 +36,24 @@ namespace ThreeDent.DevelopmentTools.Editor
             return serializableFields;
         }
 
+        private static IEnumerable<Transform> ChildProviderForBfs(Transform parent)
+        {
+            foreach (Transform child in parent)
+                yield return child;
+        }
+
+        private static IEnumerable<Transform> ChildProviderForDfs(Transform parent)
+        {
+            for (int i = parent.childCount - 1; i >= 0; i--)
+                yield return parent.GetChild(i);
+        }
+
         private void AddFieldsWithoutAttributes(VisualElement root)
         {
             GetSerializableFields(target.GetType())
             .Where(x => !HasRequiredAttribute(x))
             .Select(x => serializedObject.FindProperty(x.Name))
             .ForEach(x => root.Add(new PropertyField(x)));
-        }
-
-        private void FillParentsOnChildFields()
-        {
-            // collect all the parents.
-            // collect all the attached MonoBehavior scripts.
-            // 
-
-            // var parent = gameObject.transform.parent;
-            // while (parent != null)
-            // {
-            //     foreach (var script in parent.GetComponents<MonoBehaviour>())
-            //     {
-            //         var serializedParent = new SerializedObject(parent);
-            //         var onChildFields = GetSerializableFields(script.GetType()).Where(x => x.IsDefined<OnChildAttribute>());
-            //         foreach (var field in onChildFields)
-            //     }
-            //     parent = parent.transform.parent;
-            // }
-            // var obj = new SerializedObject(gameObject.transform.parent.gameObject);
-            // var obj = new SerializedObject(target);
-            // obj.FindProperty("number").floatValue = 9999f;
-            // obj.ApplyModifiedProperties();
         }
 
         private void HandleOnThisAttribute(VisualElement root, FieldInfo field)
@@ -92,12 +83,21 @@ namespace ThreeDent.DevelopmentTools.Editor
             var property = serializedObject.FindProperty(field.Name);
             property.objectReferenceValue = null;
 
-            foreach (Transform child in gameObject.transform)
-                if (child.TryGetComponent(field.FieldType, out var component))
-                    property.objectReferenceValue = component;
+            var attribute = field.GetCustomAttribute<OnChildAttribute>();
+            var mode = attribute.TraversingMode;
+            var offset = attribute.Offset;
 
-            if (property.objectReferenceValue == null)
-                root.Add(new HelpBox($@"This script requires component ""{field.FieldType.Name}"" to be present on one of its children.", HelpBoxMessageType.Warning));
+            IEnumerable<Transform> children;
+            if (mode == OnChildTraversingMode.BFS)
+                children = GenericUnfoldingAlgos.UnfoldTreeWithBfs(gameObject.transform, ChildProviderForBfs, false);
+            else
+                children = GenericUnfoldingAlgos.UnfoldTreeWithDfs(gameObject.transform, ChildProviderForDfs, false);
+
+            var childrenWithComponent = children.Where(x => x.TryGetComponent(field.FieldType, out _));
+            if (childrenWithComponent.Count() > offset)
+                property.objectReferenceValue = childrenWithComponent.Skip(offset).First().GetComponent(field.FieldType);
+            else
+                root.Add(new HelpBox(string.Format(ComponentOnChildNotFoundMessage, field.FieldType.Name), HelpBoxMessageType.Warning));
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -128,7 +128,6 @@ namespace ThreeDent.DevelopmentTools.Editor
                 var root = new VisualElement();
                 HandleCustomAttributes(root);
                 AddFieldsWithoutAttributes(root);
-                FillParentsOnChildFields();
                 return root;
             }
             else
