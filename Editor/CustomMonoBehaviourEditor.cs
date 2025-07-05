@@ -36,16 +36,10 @@ namespace ThreeDent.DevelopmentTools.Editor
             return serializableFields;
         }
 
-        private static IEnumerable<Transform> ChildProviderForBfs(Transform parent)
+        private static IEnumerable<Transform> ChildProvider(Transform parent)
         {
             foreach (Transform child in parent)
                 yield return child;
-        }
-
-        private static IEnumerable<Transform> ChildProviderForDfs(Transform parent)
-        {
-            for (int i = parent.childCount - 1; i >= 0; i--)
-                yield return parent.GetChild(i);
         }
 
         private void AddFieldsWithoutAttributes(VisualElement root)
@@ -88,10 +82,10 @@ namespace ThreeDent.DevelopmentTools.Editor
             var offset = attribute.Offset;
 
             IEnumerable<Transform> children;
-            if (mode == OnChildTraversingMode.BFS)
-                children = GenericUnfoldingAlgos.UnfoldTreeWithBfs(gameObject.transform, ChildProviderForBfs, false);
+            if (mode == TraversingMode.BFS)
+                children = GenericUnfoldingAlgos.UnfoldTreeWithBfs(gameObject.transform, ChildProvider, false);
             else
-                children = GenericUnfoldingAlgos.UnfoldTreeWithDfs(gameObject.transform, ChildProviderForDfs, false);
+                children = GenericUnfoldingAlgos.UnfoldTreeWithDfs(gameObject.transform, ChildProvider, false);
 
             var childrenWithComponent = children.Where(x => x.TryGetComponent(field.FieldType, out _));
             if (childrenWithComponent.Count() > offset)

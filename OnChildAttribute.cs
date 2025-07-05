@@ -2,7 +2,7 @@ using System;
 
 namespace ThreeDent.DevelopmentTools
 {
-    public enum OnChildTraversingMode
+    public enum TraversingMode
     {
         BFS,
         DFS,
@@ -12,18 +12,18 @@ namespace ThreeDent.DevelopmentTools
     public class OnChildAttribute : Attribute
     {
         private int offset;
-        private OnChildTraversingMode traversingMode;
+        private TraversingMode traversingMode;
 
         public int Offset => offset;
-        public OnChildTraversingMode TraversingMode => traversingMode;
+        public TraversingMode TraversingMode => traversingMode;
 
-        public OnChildAttribute(OnChildTraversingMode traversingMode = OnChildTraversingMode.BFS)
+        public OnChildAttribute(TraversingMode traversingMode = TraversingMode.BFS)
         {
             offset = 0;
             this.traversingMode = traversingMode;
         }
 
-        public OnChildAttribute(int index, OnChildTraversingMode traversingMode = OnChildTraversingMode.BFS)
+        public OnChildAttribute(int index, TraversingMode traversingMode = TraversingMode.BFS)
         {
             this.offset = index;
             this.traversingMode = traversingMode;
