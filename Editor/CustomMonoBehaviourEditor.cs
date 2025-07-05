@@ -26,7 +26,11 @@ namespace ThreeDent.DevelopmentTools.Editor
 
         private static bool HasRequiredAttribute(MemberInfo x)
         {
-            return x.IsDefined<OnThisAttribute>() || x.IsDefined<OnChildAttribute>();
+            return x.IsDefined<OnThisAttribute>() ||
+                   x.IsDefined<OnChildAttribute>() ||
+                   x.IsDefined<IsChildAttribute>() ||
+                   x.IsDefined<OnParentAttribute>() ||
+                   x.IsDefined<IsParentAttribute>();
         }
 
         private static IEnumerable<FieldInfo> GetSerializableFields(Type type)
@@ -52,6 +56,9 @@ namespace ThreeDent.DevelopmentTools.Editor
 
         private void HandleOnThisAttribute(VisualElement root, FieldInfo field)
         {
+            if (!field.FieldType.IsAssignableTo<Component>())
+                return;
+
             var property = serializedObject.FindProperty(field.Name);
             property.objectReferenceValue = null;
 
@@ -74,6 +81,9 @@ namespace ThreeDent.DevelopmentTools.Editor
 
         private void HandleOnChildAttribute(VisualElement root, FieldInfo field)
         {
+            if (!field.FieldType.IsAssignableTo<Component>())
+                return;
+
             var property = serializedObject.FindProperty(field.Name);
             property.objectReferenceValue = null;
 
@@ -99,14 +109,19 @@ namespace ThreeDent.DevelopmentTools.Editor
         protected void HandleCustomAttributes(VisualElement root)
         {
             var fieldsWithAttribute = GetSerializableFields(target.GetType()).Where(HasRequiredAttribute);
-            var fieldsWithProperlyUsedAttribute = fieldsWithAttribute.Where(x => x.FieldType.IsAssignableTo<Component>());
 
-            foreach (var field in fieldsWithProperlyUsedAttribute)
+            foreach (var field in fieldsWithAttribute)
             {
                 if (field.IsDefined<OnThisAttribute>())
                     HandleOnThisAttribute(root, field);
                 else if (field.IsDefined<OnChildAttribute>())
                     HandleOnChildAttribute(root, field);
+                // else if (field.IsDefined<IsChildAttribute>())
+                //     HandleIsChildAttribute(root, field);
+                // else if (field.IsDefined<OnParentAttribute>())
+                //     HandleOnParentAttribute(root, field);
+                // else if (field.IsDefined<IsParentAttribute>())
+                //     HandleIsParentAttribute(root, field);
             }
         }
 

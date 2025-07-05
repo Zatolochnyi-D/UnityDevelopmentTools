@@ -4,5 +4,5 @@ using UnityEngine;
 namespace ThreeDent.DevelopmentTools
 {
     [AttributeUsage(AttributeTargets.Field)]
-    public class IsChildAttribute : Attribute { }
+    public class IsParentAttribute : Attribute { }
 }
