@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace ThreeDent.DevelopmentTools
 {
+    /// <summary>
+    /// Marks field to be filled with first parent of this object.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
     public class IsParentAttribute : Attribute
     {
@@ -15,6 +18,8 @@ namespace ThreeDent.DevelopmentTools
             index = 0;
         }
 
+        /// <summary></summary>
+        /// <param name="index">Defines how many parents to skip. Skips first N parents.</param>
         public IsParentAttribute(int index)
         {
             this.index = index;
