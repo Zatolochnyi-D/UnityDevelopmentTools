@@ -205,6 +205,10 @@ namespace ThreeDent.DevelopmentTools.Editor
             serializedObject.ApplyModifiedProperties();
         }
 
+        /// <summary>
+        /// Performs search of all the serializable fields for custom attributes and fills them if possible.
+        /// If not, generates warning message that can be displayed with DisplayWarnings method.
+        /// </summary>
         protected void HandleCustomAttributes()
         {
             var fieldsWithAttribute = GetSerializableFields(target.GetType()).Where(HasRequiredAttribute);
@@ -224,11 +228,20 @@ namespace ThreeDent.DevelopmentTools.Editor
             }
         }
 
+        /// <summary>
+        /// Displays warnings that occured while handling custom attributes. <br/>
+        /// Call in OnInspectorGUI.
+        /// </summary>
         protected void DisplayWarnings()
         {
             warningMessages.ForEach(x => EditorGUILayout.HelpBox(x, MessageType.Warning));
         }
 
+        /// <summary>
+        /// Displays warnings that occured while handling custom attributes. <br/>
+        /// Call in CreateInspectorGUI.
+        /// </summary>
+        /// <param name="root">Your root VisualElement</param>
         protected void DisplayWarnings(VisualElement root)
         {
             warningMessages.ForEach(x => root.Add(new HelpBox(x, HelpBoxMessageType.Warning)));
