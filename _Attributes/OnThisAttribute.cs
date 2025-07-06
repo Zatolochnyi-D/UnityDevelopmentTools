@@ -1,6 +1,6 @@
 using System;
 
-namespace ThreeDent.DevelopmentTools
+namespace ThreeDent.DevelopmentTools.Attributes
 {
     /// <summary>
     /// Marks field to be filled with first matching component on this object.

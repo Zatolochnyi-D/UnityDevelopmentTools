@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace ThreeDent.DevelopmentTools
+namespace ThreeDent.DevelopmentTools.Attributes
 {
     /// <summary>
     /// Marks field to be filled with first child of this object.

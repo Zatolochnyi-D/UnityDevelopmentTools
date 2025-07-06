@@ -1,13 +1,7 @@
 using System;
 
-namespace ThreeDent.DevelopmentTools
+namespace ThreeDent.DevelopmentTools.Attributes
 {
-    public enum TraversingMode
-    {
-        BFS,
-        DFS,
-    }
-
     /// <summary>
     /// Marks field to be filled with first matching component on one of this object's children.
     /// </summary>
