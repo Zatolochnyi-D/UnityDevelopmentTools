@@ -22,9 +22,13 @@ namespace ThreeDent.DevelopmentTools.Editor
         private const string ComponentOnThisIndexNotFoundMessage = "This script requires component \"{0}\" to be present on this object under index {1}.";
         private const string ComponentOnChildNotFoundMessage = "This script requires component \"{0}\" to be present on one of its children.";
         private const string ChildNotFoundMessage = "This script requires this object to have a child.";
-        private const string ChildOnIndexNotFoundMessage = "This script requires this object to have a child undex index {0} ({1} traversing is used).";
+        private const string ChildOnIndexNotFoundMessage = "This script requires this object to have a child under index {0} ({1} traversing is used).";
+        private const string ComponentOnParentNotFoundMessage = "This script requires component \"{0}\" to be present on one of it's parents.";
+        private const string ParentNotFoundMessage = "This script requires this object to have a parent.";
+        private const string ParentOnIndexNotFoundMessage = "This script requires this object to have a parent under index {0}.";
 
         private GameObject gameObject;
+        private readonly List<string> warningMessages = new();
 
         private static bool HasRequiredAttribute(MemberInfo x)
         {
@@ -56,7 +60,7 @@ namespace ThreeDent.DevelopmentTools.Editor
             .ForEach(x => root.Add(new PropertyField(x)));
         }
 
-        private void HandleOnThisAttribute(VisualElement root, FieldInfo field)
+        private void HandleOnThisAttribute(FieldInfo field)
         {
             if (!field.FieldType.IsAssignableTo<Component>())
                 return;
@@ -73,15 +77,15 @@ namespace ThreeDent.DevelopmentTools.Editor
             else
             {
                 if (index == 0)
-                    root.Add(new HelpBox(string.Format(ComponentOnThisNotFoundMessage, field.FieldType.Name), HelpBoxMessageType.Warning));
+                    warningMessages.Add(string.Format(ComponentOnThisNotFoundMessage, field.FieldType.Name));
                 else
-                    root.Add(new HelpBox(string.Format(ComponentOnThisIndexNotFoundMessage, field.FieldType.Name, index), HelpBoxMessageType.Warning));
+                    warningMessages.Add(string.Format(ComponentOnThisIndexNotFoundMessage, field.FieldType.Name, index));
             }
 
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void HandleOnChildAttribute(VisualElement root, FieldInfo field)
+        private void HandleOnChildAttribute(FieldInfo field)
         {
             if (!field.FieldType.IsAssignableTo<Component>())
                 return;
@@ -103,12 +107,12 @@ namespace ThreeDent.DevelopmentTools.Editor
             if (childrenWithComponent.Count() > offset)
                 property.objectReferenceValue = childrenWithComponent.Skip(offset).First().GetComponent(field.FieldType);
             else
-                root.Add(new HelpBox(string.Format(ComponentOnChildNotFoundMessage, field.FieldType.Name), HelpBoxMessageType.Warning));
+                warningMessages.Add(string.Format(ComponentOnChildNotFoundMessage, field.FieldType.Name));
 
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void HandleIsChildAttribute(VisualElement root, FieldInfo field)
+        private void HandleIsChildAttribute(FieldInfo field)
         {
             if (!(field.FieldType.IsAssignableTo<GameObject>() || field.FieldType.IsAssignableTo<Transform>()))
                 return;
@@ -134,15 +138,15 @@ namespace ThreeDent.DevelopmentTools.Editor
             else
             {
                 if (offset == 0)
-                    root.Add(new HelpBox(string.Format(ChildNotFoundMessage), HelpBoxMessageType.Warning));
+                    warningMessages.Add(string.Format(ChildNotFoundMessage));
                 else
-                    root.Add(new HelpBox(string.Format(ChildOnIndexNotFoundMessage, offset, mode), HelpBoxMessageType.Warning));
+                    warningMessages.Add(string.Format(ChildOnIndexNotFoundMessage, offset, mode));
             }
 
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void HandleOnParentAttribute(VisualElement root, FieldInfo field)
+        private void HandleOnParentAttribute(FieldInfo field)
         {
             if (!field.FieldType.IsAssignableTo<Component>())
                 return;
@@ -150,12 +154,25 @@ namespace ThreeDent.DevelopmentTools.Editor
             var property = serializedObject.FindProperty(field.Name);
             property.objectReferenceValue = null;
 
-            
+            var offset = field.GetCustomAttribute<OnParentAttribute>().Offset;
+            var parent = gameObject.transform.parent;
+            var parents = new List<Transform>();
+            while (parent != null)
+            {
+                parents.Add(parent);
+                parent = parent.parent;
+            }
+
+            var parentsWithNeededComponent = parents.Where(x => x.TryGetComponent(field.FieldType, out _));
+            if (parentsWithNeededComponent.Count() > offset)
+                property.objectReferenceValue = parentsWithNeededComponent.Skip(offset).First().GetComponent(field.FieldType);
+            else
+                warningMessages.Add(string.Format(ComponentOnParentNotFoundMessage, field.FieldType));
 
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void HandleIsParentAttribute(VisualElement root, FieldInfo field)
+        private void HandleIsParentAttribute(FieldInfo field)
         {
             if (!(field.FieldType.IsAssignableTo<GameObject>() || field.FieldType.IsAssignableTo<Transform>()))
                 return;
@@ -163,26 +180,58 @@ namespace ThreeDent.DevelopmentTools.Editor
             var property = serializedObject.FindProperty(field.Name);
             property.objectReferenceValue = null;
 
+            var index = field.GetCustomAttribute<IsParentAttribute>().Index;
+            var parent = gameObject.transform.parent;
+            var parents = new List<Transform>();
+            while (parent != null)
+            {
+                parents.Add(parent);
+                parent = parent.parent;
+            }
+            
+            if (parents.Count() > index)
+            {
+                var actualParent = parents.Skip(index).First();
+                property.objectReferenceValue = field.FieldType.IsAssignableTo<GameObject>() ? actualParent.gameObject : actualParent;
+            }
+            else
+            {
+                if (index == 0)
+                    warningMessages.Add(string.Format(ParentNotFoundMessage));
+                else
+                    warningMessages.Add(string.Format(ParentOnIndexNotFoundMessage, index));
+            }
+
             serializedObject.ApplyModifiedProperties();
         }
 
-        protected void HandleCustomAttributes(VisualElement root)
+        protected void HandleCustomAttributes()
         {
             var fieldsWithAttribute = GetSerializableFields(target.GetType()).Where(HasRequiredAttribute);
 
             foreach (var field in fieldsWithAttribute)
             {
                 if (field.IsDefined<OnThisAttribute>())
-                    HandleOnThisAttribute(root, field);
+                    HandleOnThisAttribute(field);
                 else if (field.IsDefined<OnChildAttribute>())
-                    HandleOnChildAttribute(root, field);
+                    HandleOnChildAttribute(field);
                 else if (field.IsDefined<IsChildAttribute>())
-                    HandleIsChildAttribute(root, field);
+                    HandleIsChildAttribute(field);
                 else if (field.IsDefined<OnParentAttribute>())
-                    HandleOnParentAttribute(root, field);
+                    HandleOnParentAttribute(field);
                 else if (field.IsDefined<IsParentAttribute>())
-                    HandleIsParentAttribute(root, field);
+                    HandleIsParentAttribute(field);
             }
+        }
+
+        protected void DisplayWarnings()
+        {
+            warningMessages.ForEach(x => EditorGUILayout.HelpBox(x, MessageType.Warning));
+        }
+
+        protected void DisplayWarnings(VisualElement root)
+        {
+            warningMessages.ForEach(x => root.Add(new HelpBox(x, HelpBoxMessageType.Warning)));
         }
 
         protected virtual void OnEnable()
@@ -195,7 +244,8 @@ namespace ThreeDent.DevelopmentTools.Editor
             if (CustomMonoBehaviourEditorUsageController.UseCustomMonoBehaviourEditor)
             {
                 var root = new VisualElement();
-                HandleCustomAttributes(root);
+                HandleCustomAttributes();
+                DisplayWarnings(root);
                 AddFieldsWithoutAttributes(root);
                 return root;
             }
