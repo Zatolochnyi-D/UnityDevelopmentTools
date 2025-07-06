@@ -3,5 +3,8 @@
   "version": "1.0.0",
   "displayName": "Development Tools",
   "description": "Tools for easier development in Unity.",
-  "unity": "6000.0"
+  "unity": "6000.0",
+  "dependencies": {
+    "threedent.helpers": "1.0.2"
+  }
 }
