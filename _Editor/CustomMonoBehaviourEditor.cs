@@ -100,9 +100,9 @@ namespace ThreeDent.DevelopmentTools.Editor
 
             IEnumerable<Transform> children;
             if (mode == TraversingMode.BFS)
-                children = GenericUnfoldingAlgos.UnfoldTreeWithBfs(gameObject.transform, ChildProvider, false);
+                children = NonLinearStructureAlgorithms.TreeBfsUnfold(gameObject.transform, ChildProvider, false);
             else
-                children = GenericUnfoldingAlgos.UnfoldTreeWithDfs(gameObject.transform, ChildProvider, false);
+                children = NonLinearStructureAlgorithms.TreeDfsUnfold(gameObject.transform, ChildProvider, false);
 
             var childrenWithComponent = children.Where(x => x.TryGetComponent(field.FieldType, out _));
             if (childrenWithComponent.Count() > offset)
@@ -127,9 +127,9 @@ namespace ThreeDent.DevelopmentTools.Editor
 
             IEnumerable<Transform> children;
             if (mode == TraversingMode.BFS)
-                children = GenericUnfoldingAlgos.UnfoldTreeWithBfs(gameObject.transform, ChildProvider, false);
+                children = NonLinearStructureAlgorithms.TreeBfsUnfold(gameObject.transform, ChildProvider, false);
             else
-                children = GenericUnfoldingAlgos.UnfoldTreeWithDfs(gameObject.transform, ChildProvider, false);
+                children = NonLinearStructureAlgorithms.TreeDfsUnfold(gameObject.transform, ChildProvider, false);
 
             if (children.Count() > offset)
             {
