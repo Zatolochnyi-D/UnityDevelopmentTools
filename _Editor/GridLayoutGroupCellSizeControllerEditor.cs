@@ -1,23 +1,30 @@
 using ThreeDent.DevelopmentTools;
+using ThreeDent.DevelopmentTools.Editor;
 using UnityEditor;
+using UnityEngine.UIElements;
 
 namespace ThreeDent.Helpers.Tools.Editor
 {
     [CustomEditor(typeof(GridLayoutGroupCellSizeController))]
-    public class GridLayoutGroupCellSizeControllerEditor : UnityEditor.Editor
+    public class GridLayoutGroupCellSizeControllerEditor : CustomMonoBehaviourEditor
     {
         private GridLayoutGroupCellSizeController controller;
 
-        void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             controller = (GridLayoutGroupCellSizeController)target;
-            controller.Initialize();
-            controller.GridCellSizeToRectTransformSize();
+        }
+
+        public override VisualElement CreateInspectorGUI()
+        {
+            return null;
         }
 
         public override void OnInspectorGUI()
         {
-            base.OnInspectorGUI();
+            HandleCustomAttributes();
+            DisplayWarnings();
             controller.GridCellSizeToRectTransformSize();
         }
     }

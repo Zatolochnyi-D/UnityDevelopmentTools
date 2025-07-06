@@ -1,3 +1,4 @@
+using ThreeDent.DevelopmentTools.Attributes;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,16 +9,8 @@ namespace ThreeDent.DevelopmentTools
     /// </summary>
     public class GridLayoutGroupCellSizeController : MonoBehaviour
     {
-        [HideInInspector] private GridLayoutGroup gridLayout;
-        [HideInInspector] private RectTransform rectTransform;
-
-        public void Initialize()
-        {
-            if (gridLayout == null)
-                gridLayout = GetComponent<GridLayoutGroup>();
-            if (rectTransform == null)
-                rectTransform = (RectTransform)transform;
-        }
+        [OnThis, SerializeField] private GridLayoutGroup gridLayout;
+        [OnThis, SerializeField] private RectTransform rectTransform;
 
         public void GridCellSizeToRectTransformSize()
         {
