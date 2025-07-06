@@ -8,6 +8,7 @@ using ThreeDent.Helpers.Extensions;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using ThreeDent.Helpers.Utils;
+using ThreeDent.DevelopmentTools.Attributes;
 
 namespace ThreeDent.DevelopmentTools.Editor
 {
