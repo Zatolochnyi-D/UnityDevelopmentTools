@@ -1,9 +1,7 @@
 {
     "name": "ThreeDent.DevelopmentTools",
     "rootNamespace": "ThreeDent.DevelopmentTools",
-    "references": [
-        "GUID:f9bcf692edd084d22bb2f2ba4aae20c0"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

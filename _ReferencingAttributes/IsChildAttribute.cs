@@ -1,12 +1,12 @@
 using System;
 
-namespace ThreeDent.DevelopmentTools.Attributes
+namespace ThreeDent.DevelopmentTools.ReferencingAttributes
 {
     /// <summary>
-    /// Marks field to be filled with first matching component on one of this object's children.
+    /// Marks field to be filled with first child of this object.
     /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
-    public class OnChildAttribute : Attribute
+    public class IsChildAttribute : Attribute
     {
         private int offset;
         private TraversingMode traversingMode;
@@ -16,18 +16,18 @@ namespace ThreeDent.DevelopmentTools.Attributes
 
         /// <summary></summary>
         /// <param name="traversingMode">Defines how to unfold children hierarchy</param>
-        public OnChildAttribute(TraversingMode traversingMode = TraversingMode.BFS)
+        public IsChildAttribute(TraversingMode traversingMode = TraversingMode.BFS)
         {
             offset = 0;
             this.traversingMode = traversingMode;
         }
 
         /// <summary></summary>
-        /// <param name="index">Defines how many matching children to skip. Skips first N matching children.</param>
+        /// <param name="index">Defines how many children to skip. Skips first N children.</param>
         /// <param name="traversingMode">Defines how to unfold children hierarchy</param>
-        public OnChildAttribute(int index, TraversingMode traversingMode = TraversingMode.BFS)
+        public IsChildAttribute(int offset, TraversingMode traversingMode = TraversingMode.BFS)
         {
-            this.offset = index;
+            this.offset = offset;
             this.traversingMode = traversingMode;
         }
     }

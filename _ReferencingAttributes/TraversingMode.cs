@@ -1,4 +1,4 @@
-namespace ThreeDent.DevelopmentTools.Attributes
+namespace ThreeDent.DevelopmentTools.ReferencingAttributes
 {
     public enum TraversingMode
     {

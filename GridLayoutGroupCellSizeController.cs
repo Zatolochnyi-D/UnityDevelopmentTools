@@ -1,4 +1,4 @@
-using ThreeDent.DevelopmentTools.Attributes;
+using ThreeDent.DevelopmentTools.ReferencingAttributes;
 using UnityEngine;
 using UnityEngine.UI;
 

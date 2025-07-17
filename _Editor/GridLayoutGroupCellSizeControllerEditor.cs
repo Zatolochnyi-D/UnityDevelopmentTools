@@ -1,5 +1,5 @@
 using ThreeDent.DevelopmentTools;
-using ThreeDent.DevelopmentTools.Editor;
+using ThreeDent.DevelopmentTools.ReferencingAttributes.Editor;
 using UnityEditor;
 using UnityEngine.UIElements;
 

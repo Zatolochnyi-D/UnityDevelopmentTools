@@ -1,7 +1,6 @@
 using System;
-using UnityEngine;
 
-namespace ThreeDent.DevelopmentTools.Attributes
+namespace ThreeDent.DevelopmentTools.ReferencingAttributes
 {
     /// <summary>
     /// Marks field to be filled with first parent that has this Component.
