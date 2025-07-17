@@ -1,7 +1,7 @@
-using ThreeDent.DevelopmentTools.Exceptions;
+using ThreeDent.DevelopmentTools.InterfaceReference.Exceptions;
 using UnityEngine;
 
-namespace ThreeDent.DevelopmentTools
+namespace ThreeDent.DevelopmentTools.InterfaceReference
 {
     [System.Serializable]
     public class InterfaceReference<T> where T : class

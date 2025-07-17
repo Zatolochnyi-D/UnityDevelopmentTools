@@ -1,4 +1,4 @@
-namespace ThreeDent.DevelopmentTools.Exceptions
+namespace ThreeDent.DevelopmentTools.InterfaceReference.Exceptions
 {
     [System.Serializable]
     public class NotAnInterfaceException : System.Exception

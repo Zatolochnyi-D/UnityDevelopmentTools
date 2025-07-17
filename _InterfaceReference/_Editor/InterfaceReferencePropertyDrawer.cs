@@ -1,9 +1,9 @@
 using System.Linq;
-using ThreeDent.DevelopmentTools;
+using ThreeDent.DevelopmentTools.InterfaceReference;
 using UnityEditor;
 using UnityEngine;
 
-namespace ThreeDent.Helpers.Tools.Editor
+namespace ThreeDent.Helpers.Tools.InterfaceReference.Editor
 {
     [CustomPropertyDrawer(typeof(InterfaceReference<>))]
     public class InterfaceReferencePropertyDrawer : PropertyDrawer
