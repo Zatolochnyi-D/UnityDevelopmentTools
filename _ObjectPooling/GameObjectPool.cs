@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace ThreeDent.DevelopmentTools
+namespace ThreeDent.DevelopmentTools.ObjectPooling
 {
     /// <summary>
     /// Class for simple pool operations. Returns copies of given object on request. If no objects in pool, creates new copy to return.
