@@ -4,10 +4,10 @@ using System.Reflection;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using ThreeDent.Helpers.Extensions;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
-using ThreeDent.Helpers.Utils;
+using ThreeDent.DevelopmentTools.Extensions;
+using ThreeDent.DevelopmentTools.Utilities;
 
 namespace ThreeDent.DevelopmentTools.ReferencingAttributes.Editor
 {
