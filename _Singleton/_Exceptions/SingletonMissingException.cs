@@ -1,4 +1,4 @@
-namespace ThreeDent.DevelopmentTools.Exceptions
+namespace ThreeDent.DevelopmentTools.Singleton.Exceptions
 {
     [System.Serializable]
     public class SingletonMissingException : System.Exception

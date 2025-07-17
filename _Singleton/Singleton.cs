@@ -1,7 +1,7 @@
-using ThreeDent.DevelopmentTools.Exceptions;
+using ThreeDent.DevelopmentTools.Singleton.Exceptions;
 using UnityEngine;
 
-namespace ThreeDent.DevelopmentTools
+namespace ThreeDent.DevelopmentTools.Singleton
 {
     /// <summary>
     /// Class that handles singleton set up.
