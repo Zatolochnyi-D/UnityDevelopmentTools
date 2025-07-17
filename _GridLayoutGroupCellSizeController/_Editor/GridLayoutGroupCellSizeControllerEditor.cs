@@ -1,9 +1,10 @@
 using ThreeDent.DevelopmentTools;
+using ThreeDent.DevelopmentTools.GridLayoutGroupTools;
 using ThreeDent.DevelopmentTools.ReferencingAttributes.Editor;
 using UnityEditor;
 using UnityEngine.UIElements;
 
-namespace ThreeDent.Helpers.Tools.Editor
+namespace ThreeDent.Helpers.Tools.GridLayoutGroupTools.Editor
 {
     [CustomEditor(typeof(GridLayoutGroupCellSizeController))]
     public class GridLayoutGroupCellSizeControllerEditor : CustomMonoBehaviourEditor
