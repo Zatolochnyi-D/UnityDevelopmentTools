@@ -1,41 +1,39 @@
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace ThreeDent.DevelopmentTools.ObjectPooling
 {
-    /// <summary>
-    /// Class for simple pool operations. Returns copies of given object on request. If no objects in pool, creates new copy to return.
-    /// <br/> If object is in pool is determined by it's "active" flag (false - in pool).
-    /// </summary>
-    public class GameObjectPool
+    public class GameObjectPool : ConfigurableObjectPool<GameObject>
     {
         private readonly GameObject original;
-        private readonly List<GameObject> pool = new();
         private readonly Transform parent;
 
-        public GameObjectPool(GameObject original, int amountToPreInit = 0, Transform parent = null)
+        public GameObjectPool(GameObject original, Transform parent = null, bool collectionCheck = true, int defaultCapacity = 0, int maxSize = int.MaxValue) : base(collectionCheck, defaultCapacity, maxSize)
         {
             this.original = original;
             this.parent = parent;
-            for (int i = 0; i < amountToPreInit; i++)
-                CreateNew();
         }
 
-        private GameObject CreateNew()
+        protected override GameObject OnCreate()
         {
-            GameObject instantiatedObject = Object.Instantiate(original, parent);
-            instantiatedObject.SetActive(false);
-            pool.Add(instantiatedObject);
-            return instantiatedObject;
+            var newInstance = Object.Instantiate(original, parent);
+            newInstance.SetActive(false);
+            return newInstance;
         }
 
-        public GameObject Get()
+        protected override void OnGet(GameObject instance)
         {
-            GameObject pooledObject = pool.FirstOrDefault(x => !x.activeSelf);
-            if (pooledObject == null)
-                pooledObject = CreateNew();
-            return pooledObject;
+            instance.SetActive(true);
+        }
+
+        protected override void OnRelease(GameObject instance)
+        {
+            instance.SetActive(false);
+            instance.transform.parent = parent;
+        }
+
+        protected override void OnDestroy(GameObject instance)
+        {
+            Object.Destroy(instance);
         }
     }
 }
