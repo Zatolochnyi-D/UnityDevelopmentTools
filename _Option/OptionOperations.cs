@@ -1,5 +1,4 @@
 using System;
-using ThreeDent.DevelopmentTools.Option.Exceptions;
 
 namespace ThreeDent.DevelopmentTools.Option
 {
@@ -7,8 +6,6 @@ namespace ThreeDent.DevelopmentTools.Option
     {
         public static Option<T> Some<T>(T value)
         {
-            if (value != null)
-                throw new OptionNullValueProvidedException("Option.Some cannot be created from null value. Use FromPossibleNull instead.");
             return new Some<T>(value);
         }
 
