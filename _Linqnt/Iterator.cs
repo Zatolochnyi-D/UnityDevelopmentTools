@@ -1,53 +1,40 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using ThreeDent.DevelopmentTools.Options;
-using UnityEngine;
 
 namespace ThreeDent.DevelopmentTools.Linqnt
 {
-    public readonly struct Iterator<TInput, TOutput> //where TInput : Option<TInput> where TOutput : Option<TOutput>
+    public readonly struct Iterator<TInput, TOutput> : IEnumerable<TOutput>
     {
         private readonly IEnumerable<TInput> values;
-        private readonly Func<TInput, TOutput> converter;
+        private readonly Func<Option<TInput>, Option<TOutput>> converter;
 
-        public Iterator(IEnumerable<TInput> values, Func<TInput, TOutput> converter)
+        public Iterator(IEnumerable<TInput> values, Func<Option<TInput>, Option<TOutput>> converter)
         {
             this.values = values;
             this.converter = converter;
         }
 
-        public readonly Iterator<TInput, TNewResult> ComposeConverters<TNewResult>(Func<TOutput, TNewResult> newConverter) where TNewResult : Option<TNewResult>
+        public Iterator<TInput, TNewOutput> ComposeConverters<TNewOutput>(Func<Option<TOutput>, Option<TNewOutput>> newConverter)
         {
             var converterFunc = converter;
-            return new Iterator<TInput, TNewResult>(values, x => newConverter(converterFunc(x)));
+            return new Iterator<TInput, TNewOutput>(values, x => newConverter(converterFunc(x)));
         }
 
-        public readonly IEnumerable<TOutput> GetResult()
+        public IEnumerator<TOutput> GetEnumerator()
         {
             foreach (var value in values)
             {
-                yield return converter(value);
+                var result = converter(Option.Some(value));
+                if (result is Some<TOutput> x)
+                    yield return x.Value;
             }
         }
-    }
 
-    public class Tester
-    {
-        public static List<int> values = new List<int>() { 1, 2, 3, 4, 5 };
-
-        public void Test()
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            // var conv = new Iter<int, string>(values, ConvertionFuncs.ToString);
-            // var conv2 = conv.CombineIters(ConvertionFuncs.AddSuffix);
-            // var conv3 = conv2.CombineIters(ConvertionFuncs.Parse);
-            // foreach (var res in conv.GetResult())
-            //     Debug.Log($"{res} - {res.GetType()}");
-            // Debug.Log("-----");
-            // foreach (var res in conv2.GetResult())
-            //     Debug.Log($"{res} - {res.GetType()}");
-            // Debug.Log("-----");
-            // foreach (var res in conv3.GetResult())
-            //     Debug.Log($"{res} - {res.GetType()}");
+            return GetEnumerator();
         }
     }
 
@@ -55,17 +42,22 @@ namespace ThreeDent.DevelopmentTools.Linqnt
     {
         public static Iterator<TInput, TOutput> Select<TInput, TOutput>(this IEnumerable<TInput> collection, Func<TInput, TOutput> selector)
         {
-            return new Iterator<TInput, TOutput>(collection, selector);
+            return new Iterator<TInput, TOutput>(collection, x => x.Map(selector));
         }
 
-        // public static Iterator<TInput, TOutput> Select<TInput, TMiddle, TOutput>(this Iterator<TInput, TMiddle> iterator, Func<TMiddle, TOutput> selector)
-        // {
-        //     return iterator.ComposeConverters(selector);
-        // }
+        public static Iterator<TInput, TOutput> Select<TInput, TMiddle, TOutput>(this Iterator<TInput, TMiddle> iterator, Func<TMiddle, TOutput> selector)
+        {
+            return iterator.ComposeConverters(x => x.Map(selector));
+        }
 
-        // public static Iterator<TInput, TOutput> Where<TInput, TOutput>(this Iterator<TInput, TOutput> iterator, Func<TInput, bool> predicate)
-        // {
+        public static Iterator<T, T> Where<T>(this IEnumerable<T> collection, Func<T, bool> predicate)
+        {
+            return new Iterator<T, T>(collection, x => x.Filter(predicate));
+        }
 
-        // }
-    }
+        public static Iterator<TInput, TOutput> Where<TInput, TOutput>(this Iterator<TInput, TOutput> iterator, Func<TOutput, bool> predicate)
+        {
+            return iterator.ComposeConverters(x => x.Filter(predicate));
+        }
+    }   
 }
