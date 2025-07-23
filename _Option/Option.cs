@@ -1,4 +1,4 @@
-namespace ThreeDent.DevelopmentTools.Option
+namespace ThreeDent.DevelopmentTools.Options
 {
     public abstract class Option<T> { internal Option() { } }
 
