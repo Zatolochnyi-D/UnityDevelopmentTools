@@ -10,7 +10,7 @@ namespace ThreeDent.DevelopmentTools.Utilities
         /// </summary>
         public static int GetSingleBitBinary(int position)
         {
-            return Mathf.FloorToInt(Mathf.Pow(2, position));
+            return 1 << position;
         }
 
         /// <summary>
