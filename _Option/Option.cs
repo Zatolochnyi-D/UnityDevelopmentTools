@@ -1,6 +1,6 @@
 using System;
 
-namespace ThreeDent.DevelopmentTools.Option
+namespace ThreeDent.DevelopmentTools.Options
 {
     public readonly struct Option<T>
     {
@@ -15,6 +15,11 @@ namespace ThreeDent.DevelopmentTools.Option
         {
             this.value = value;
             hasValue = true;
+        }
+
+        public static implicit operator Option<T>(T value)
+        {
+            return Option.Some(value);
         }
     }
 }
