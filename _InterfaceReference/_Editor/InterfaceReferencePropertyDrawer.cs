@@ -37,11 +37,15 @@ namespace ThreeDent.Helpers.Tools.InterfaceReference.Editor
                         script.objectReferenceValue = interfaceImplementor;
                 }
                 else if (providedObject is MonoBehaviour monoBehaviour)
+                {
                     if (fieldGenericType.IsAssignableFrom(monoBehaviour.GetType()))
                         script.objectReferenceValue = monoBehaviour;
+                }
             }
             else
+            {
                 script.objectReferenceValue = null;
+            }
 
             EditorGUI.EndProperty();
         }

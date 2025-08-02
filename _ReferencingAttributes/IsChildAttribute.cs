@@ -8,8 +8,8 @@ namespace ThreeDent.DevelopmentTools.ReferencingAttributes
     [AttributeUsage(AttributeTargets.Field)]
     public class IsChildAttribute : Attribute
     {
-        private int offset;
-        private TraversingMode traversingMode;
+        private readonly int offset;
+        private readonly TraversingMode traversingMode;
 
         public int Offset => offset;
         public TraversingMode TraversingMode => traversingMode;

@@ -8,7 +8,7 @@ namespace ThreeDent.DevelopmentTools.ReferencingAttributes
     [AttributeUsage(AttributeTargets.Field)]
     public class IsParentAttribute : Attribute
     {
-        private int index;
+        private readonly int index;
 
         public int Index => index;
 

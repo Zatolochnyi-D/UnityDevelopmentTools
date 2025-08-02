@@ -8,7 +8,7 @@ namespace ThreeDent.DevelopmentTools.ReferencingAttributes
     [AttributeUsage(AttributeTargets.Field)]
     public class OnParentAttribute : Attribute
     {
-        private int offset;
+        private readonly int offset;
 
         public int Offset => offset;
 

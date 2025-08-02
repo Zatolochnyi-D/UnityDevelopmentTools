@@ -1,9 +1,10 @@
+using System;
 using ThreeDent.DevelopmentTools.InterfaceReference.Exceptions;
 using UnityEngine;
 
 namespace ThreeDent.DevelopmentTools.InterfaceReference
 {
-    [System.Serializable]
+    [Serializable]
     public class InterfaceReference<T> where T : class
     {
         private static void ThrowIfTypeIsNotAnInterface()
@@ -12,20 +13,16 @@ namespace ThreeDent.DevelopmentTools.InterfaceReference
                 throw new NotAnInterfaceException($"Interface Reference got type \"{typeof(T)}\", which is not an interface.");
         }
 
-        [SerializeField] private MonoBehaviour script; // Due to property drawer (source this value), this field implements interface T or is null.
-        private T thisInterface;
+        [SerializeField] private MonoBehaviour script; // Due to property drawer (source of this value), this field implements interface T or is null.
+        private readonly Lazy<T> thisInterface;
 
         public GameObject GameObject => script != null ? script.gameObject : null;
+        public T Interface => thisInterface.Value;
 
         public InterfaceReference()
         {
             ThrowIfTypeIsNotAnInterface();
-        }
-
-        public T GetInterface()
-        {
-            thisInterface ??= script as T;
-            return thisInterface;
+            Lazy<T> val = new(() => script as T);
         }
     }
 }
