@@ -12,21 +12,14 @@ namespace ThreeDent.DevelopmentTools.Singleton
         private static T instance;
 
         /// <exception cref="SingletonMissingException">Thrown when singleton was not created at the moment of calling this getter.</exception>
-        public static T Instance
-        { 
-            get => instance ?? throw new SingletonMissingException($"Singleton {typeof(T)} does not exist currently. Check if you have created it.");
-        }
+        public static T Instance => instance ?? throw new SingletonMissingException($"Singleton {typeof(T)} does not exist currently. Check if it calls base.Awake() or at least exists on scene.");
 
         protected virtual void Awake()
         {
             if (instance == null)
-            {
                 instance = (T)this;
-            }
             else
-            {
                 Debug.LogWarning($"There is already one instance of {typeof(T)}. Make sure there are no duplicates.");
-            }
         }
     }
 }
