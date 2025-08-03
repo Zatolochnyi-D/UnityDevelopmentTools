@@ -1,6 +1,6 @@
 {
   "name": "com.threedent.developmenttools",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "displayName": "Development Tools",
   "description": "Tools for easier development in Unity.",
   "unity": "6000.0"

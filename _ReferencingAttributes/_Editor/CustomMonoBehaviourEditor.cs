@@ -19,13 +19,13 @@ namespace ThreeDent.DevelopmentTools.ReferencingAttributes.Editor
     public class CustomMonoBehaviourEditor : UnityEditor.Editor
     {
         private const string ComponentOnThisNotFoundMessage = "This script requires component \"{0}\" to be present on this object.";
-        private const string ComponentOnThisIndexNotFoundMessage = "This script requires component \"{0}\" to be present on this object under index {1}.";
+        private const string ComponentOnThisIndexNotFoundMessage = "This script requires component \"{0}\" to be present on this object under index {1}, but only {2} components are present on object.";
         private const string ComponentOnChildNotFoundMessage = "This script requires component \"{0}\" to be present on one of its children.";
         private const string ChildNotFoundMessage = "This script requires this object to have a child.";
-        private const string ChildOnIndexNotFoundMessage = "This script requires this object to have a child under index {0} ({1} traversing is used).";
+        private const string ChildOnIndexNotFoundMessage = "This script requires this object to have a child under index {0} ({1} traversing is used), but only {2} children were found.";
         private const string ComponentOnParentNotFoundMessage = "This script requires component \"{0}\" to be present on one of it's parents.";
         private const string ParentNotFoundMessage = "This script requires this object to have a parent.";
-        private const string ParentOnIndexNotFoundMessage = "This script requires this object to have a parent under index {0}.";
+        private const string ParentOnIndexNotFoundMessage = "This script requires this object to have a parent under index {0}, but only {2} parents were found.";
 
         private GameObject gameObject;
         private readonly List<string> warningMessages = new();
@@ -79,7 +79,7 @@ namespace ThreeDent.DevelopmentTools.ReferencingAttributes.Editor
                 if (index == 0)
                     warningMessages.Add(string.Format(ComponentOnThisNotFoundMessage, field.FieldType.Name));
                 else
-                    warningMessages.Add(string.Format(ComponentOnThisIndexNotFoundMessage, field.FieldType.Name, index));
+                    warningMessages.Add(string.Format(ComponentOnThisIndexNotFoundMessage, field.FieldType.Name, index, components.Length));
             }
 
             serializedObject.ApplyModifiedProperties();
@@ -130,7 +130,8 @@ namespace ThreeDent.DevelopmentTools.ReferencingAttributes.Editor
             else
                 children = NonLinearStructureAlgorithms.TreeDfsUnfold(gameObject.transform, ChildProvider, false);
 
-            if (children.Count() > offset)
+            var childrenCound = children.Count();
+            if (childrenCound > offset)
             {
                 var child = children.Skip(offset).First();
                 property.objectReferenceValue = field.FieldType.IsAssignableTo<GameObject>() ? child.gameObject : child;
@@ -140,7 +141,7 @@ namespace ThreeDent.DevelopmentTools.ReferencingAttributes.Editor
                 if (offset == 0)
                     warningMessages.Add(string.Format(ChildNotFoundMessage));
                 else
-                    warningMessages.Add(string.Format(ChildOnIndexNotFoundMessage, offset, mode));
+                    warningMessages.Add(string.Format(ChildOnIndexNotFoundMessage, offset, mode, childrenCound));
             }
 
             serializedObject.ApplyModifiedProperties();
@@ -188,8 +189,9 @@ namespace ThreeDent.DevelopmentTools.ReferencingAttributes.Editor
                 parents.Add(parent);
                 parent = parent.parent;
             }
-            
-            if (parents.Count() > index)
+
+            var parentsCound = parents.Count();
+            if (parentsCound > index)
             {
                 var actualParent = parents.Skip(index).First();
                 property.objectReferenceValue = field.FieldType.IsAssignableTo<GameObject>() ? actualParent.gameObject : actualParent;
@@ -199,7 +201,7 @@ namespace ThreeDent.DevelopmentTools.ReferencingAttributes.Editor
                 if (index == 0)
                     warningMessages.Add(string.Format(ParentNotFoundMessage));
                 else
-                    warningMessages.Add(string.Format(ParentOnIndexNotFoundMessage, index));
+                    warningMessages.Add(string.Format(ParentOnIndexNotFoundMessage, index, parentsCound));
             }
 
             serializedObject.ApplyModifiedProperties();
