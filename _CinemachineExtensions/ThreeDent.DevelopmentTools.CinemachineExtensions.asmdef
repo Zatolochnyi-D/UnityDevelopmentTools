@@ -1,0 +1,24 @@
+{
+    "name": "ThreeDent.DevelopmentTools.CinemachineExtensions",
+    "rootNamespace": "ThreeDent.DevelopmentTools.CinemachineExtensions",
+    "references": [
+        "GUID:4307f53044263cf4b835bd812fc161a4"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "USE_CINEMACHINE"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.cinemachine",
+            "expression": "3.1.4",
+            "define": "USE_CINEMACHINE"
+        }
+    ],
+    "noEngineReferences": false
+}
