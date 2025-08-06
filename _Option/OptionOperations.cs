@@ -23,12 +23,20 @@ namespace ThreeDent.DevelopmentTools.Options
         }
 
 
-        public static T DefaultWith<T>(this Option<T> option, T defaultValue)
+        public static T ReadOrDefault<T>(this Option<T> option, T defaultValue)
         {
             if (option.IsSome)
                 return option.Value;
             else
                 return defaultValue;
+        }
+
+        public static T ReadOrThrow<T>(this Option<T> option, Exception exception)
+        {
+            if (option.IsSome)
+                return option.Value;
+            else
+                throw exception;
         }
 
 

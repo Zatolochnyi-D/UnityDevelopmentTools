@@ -10,10 +10,10 @@ namespace ThreeDent.DevelopmentTools.Extensions
         /// </summary>
         public static Color With(this Color color, Option<float> r = default, Option<float> g = default, Option<float> b = default, Option<float> a = default)
         {
-            color.r = Option.DefaultWith(r, color.r);
-            color.g = Option.DefaultWith(g, color.g);
-            color.b = Option.DefaultWith(b, color.b);
-            color.a = Option.DefaultWith(a, color.a);
+            color.r = Option.ReadOrDefault(r, color.r);
+            color.g = Option.ReadOrDefault(g, color.g);
+            color.b = Option.ReadOrDefault(b, color.b);
+            color.a = Option.ReadOrDefault(a, color.a);
 
             return color;
         }
@@ -21,9 +21,9 @@ namespace ThreeDent.DevelopmentTools.Extensions
         public static Color WithHsv(this Color color, Option<float> h = default, Option<float> s = default, Option<float> v = default)
         {
             Color.RGBToHSV(color, out var thisH, out var thisS, out var thisV);
-            thisH = Option.DefaultWith(h, thisH);
-            thisS = Option.DefaultWith(s, thisS);
-            thisV = Option.DefaultWith(v, thisV);
+            thisH = Option.ReadOrDefault(h, thisH);
+            thisS = Option.ReadOrDefault(s, thisS);
+            thisV = Option.ReadOrDefault(v, thisV);
             return Color.HSVToRGB(thisH, thisS, thisV);
         }
     }
