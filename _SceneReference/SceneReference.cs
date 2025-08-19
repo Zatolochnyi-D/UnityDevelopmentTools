@@ -12,6 +12,7 @@ namespace ThreeDent.DevelopmentTools.SceneReference
         [SerializeField] private string sceneName; // Name of current or previous assigned scene (if that scene ))
 
         public string SceneName => sceneName;
+        public Object SceneAsset => sceneAsset;
         public bool IsEmpty => sceneAsset == null;
     }
 }
