@@ -13,10 +13,5 @@ namespace ThreeDent.DevelopmentTools.SceneReference
 
         public string SceneName => sceneName;
         public bool IsEmpty => sceneAsset == null;
-
-        public static implicit operator string(SceneReference sceneReference)
-        {
-            return sceneReference.SceneName;
-        }
     }
 }
