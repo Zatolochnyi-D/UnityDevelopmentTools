@@ -6,9 +6,6 @@ namespace ThreeDent.DevelopmentTools.Extensions
 {
     public static class CollectionRandomExtension
     {
-        /// <summary>
-        /// Selects random item in collection.
-        /// </summary>
         public static T PeekItem<T>(this IEnumerable<T> collection)
         {
             int length = collection.Count();
@@ -17,9 +14,6 @@ namespace ThreeDent.DevelopmentTools.Extensions
             return item;
         }
 
-        /// <summary>
-        /// Selects random item from the list.
-        /// </summary>
         public static T PeekItem<T>(this List<T> collection)
         {
             int index = Random.Range(0, collection.Count);
@@ -27,9 +21,6 @@ namespace ThreeDent.DevelopmentTools.Extensions
             return item;
         }
 
-        /// <summary>
-        /// Selects random item and removes it from the list.
-        /// </summary>
         public static T PickItem<T>(this List<T> collection)
         {
             int index = Random.Range(0, collection.Count);

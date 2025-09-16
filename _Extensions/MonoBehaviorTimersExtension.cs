@@ -6,31 +6,27 @@ namespace ThreeDent.DevelopmentTools.Extensions
 {
     public static class MonoBehaviorTimersExtension
     {
-        // Seconds
-        private static IEnumerator SingleUseTimer(Action actionToCall, float seconds, bool useScaledTime)
+        private static IEnumerator SingleUseTimer(Action actionToCall, float seconds, bool useTimeScale)
         {
-            yield return useScaledTime ? new WaitForSeconds(seconds) : new WaitForSecondsRealtime(seconds);
+            yield return useTimeScale ? new WaitForSeconds(seconds) : new WaitForSecondsRealtime(seconds);
             actionToCall.Invoke();
         }
 
-        // Frames
         private static IEnumerator SingleUseTimer(Action actionToCall, int frames)
         {
             for (int i = 0; i < frames; i++) yield return null;
             actionToCall.Invoke();
         }
 
-        // Seconds
-        private static IEnumerator RepeatableTimer(Action actionToCall, float seconds, bool useScaledTime)
+        private static IEnumerator RepeatableTimer(Action actionToCall, float seconds, bool useTimeScale)
         {
             while (true)
             {
-                yield return useScaledTime ? new WaitForSeconds(seconds) : new WaitForSecondsRealtime(seconds);
+                yield return useTimeScale ? new WaitForSeconds(seconds) : new WaitForSecondsRealtime(seconds);
                 actionToCall.Invoke();
             }
         }
 
-        // Frames
         private static IEnumerator RepeatableTimer(Action actionToCall, int frames)
         {
             while (true)
@@ -40,39 +36,21 @@ namespace ThreeDent.DevelopmentTools.Extensions
             }
         }
 
-        /// <summary>
-        /// Creates coroutine on this object that calls action after specified seconds.
-        /// </summary>
-        /// <param name="useScaledTime">Defines if the timer is affected by Time.timeScale.</param>
-        /// <returns>Created coroutine.</returns>
-        public static Coroutine InvokeOnce(this MonoBehaviour script, Action actionToCall, float seconds, bool useScaledTime = true)
+        public static Coroutine InvokeOnce(this MonoBehaviour script, Action actionToCall, float seconds, bool useTimeScale = true)
         {
-            return script.StartCoroutine(SingleUseTimer(actionToCall, seconds, useScaledTime));
+            return script.StartCoroutine(SingleUseTimer(actionToCall, seconds, useTimeScale));
         }
 
-        /// <summary>
-        /// Creates coroutine on this object that calls action after specified seconds repeatedly.
-        /// </summary>
-        /// <param name="useScaledTime">Defines if the timer is affected by Time.timeScale.</param>
-        /// <returns>Created coroutine.</returns>
         public static Coroutine InvokeRepeatedly(this MonoBehaviour script, Action actionToCall, float seconds, bool useScaledTime = true)
         {
             return script.StartCoroutine(RepeatableTimer(actionToCall, seconds, useScaledTime));
         }
 
-        /// <summary>
-        /// Creates coroutine on this object that calls action after specified amount of frames.
-        /// </summary>
-        /// <returns>Created coroutine.</returns>
         public static Coroutine InvokeOnce(this MonoBehaviour script, Action actionToCall, int frames)
         {
             return script.StartCoroutine(SingleUseTimer(actionToCall, frames));
         }
 
-        /// <summary>
-        /// Creates coroutine on this object that calls action after specified amount of frames repeatedly.
-        /// </summary>
-        /// <returns>Created coroutine.</returns>
         public static Coroutine InvokeRepeatedly(this MonoBehaviour script, Action actionToCall, int frames)
         {
             return script.StartCoroutine(RepeatableTimer(actionToCall, frames));

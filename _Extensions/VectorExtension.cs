@@ -20,16 +20,16 @@ namespace ThreeDent.DevelopmentTools.Extensions
 
         public static Vector3 With(this Vector3 vector, Option<float> x = default, Option<float> y = default, Option<float> z = default)
         {
-            vector.x = Option.ReadOrDefault(x, vector.x);
-            vector.y = Option.ReadOrDefault(y, vector.y);
-            vector.z = Option.ReadOrDefault(z, vector.z);
+            vector.x = x.ReadOrDefault(vector.x);
+            vector.y = y.ReadOrDefault(vector.y);
+            vector.z = z.ReadOrDefault(vector.z);
             return vector;
         }
 
         public static Vector2 With(this Vector2 vector, Option<float> x = default, Option<float> y = default)
         {
-            vector.x = Option.ReadOrDefault(x, vector.x);
-            vector.y = Option.ReadOrDefault(y, vector.y);
+            vector.x = x.ReadOrDefault(vector.x);
+            vector.y = y.ReadOrDefault(vector.y);
             return vector;
         }
     }

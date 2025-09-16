@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace ThreeDent.DevelopmentTools.Extensions
 {
     public static class LinqExtension
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> Clone<T>(this IEnumerable<T> collection)
         {
             return collection.ToArray();
