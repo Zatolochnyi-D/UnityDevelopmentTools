@@ -1,3 +1,4 @@
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -5,9 +6,6 @@ namespace ThreeDent.DevelopmentTools.Utilities.Editor
 {
     public static class EditorUtils
     {
-        /// <summary>
-        /// Draws horizontal line in the Inspector with one space before and after.
-        /// </summary>
         public static void HorizontalLine(int height = 1, Color? color = null)
         {
             color ??= new(0.4f, 0.4f, 0.4f);
@@ -17,6 +15,14 @@ namespace ThreeDent.DevelopmentTools.Utilities.Editor
             rect.height = height;
             EditorGUI.DrawRect(rect, color.Value);
             EditorGUILayout.Space();
+        }
+
+        public static void ClearEditorLog()
+        {
+            var assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
+            var type = assembly.GetType("UnityEditor.LogEntries");
+            var method = type.GetMethod("Clear");
+            method.Invoke(new object(), null);
         }
     }
 }
