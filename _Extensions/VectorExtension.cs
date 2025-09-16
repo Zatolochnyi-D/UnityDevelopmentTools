@@ -5,9 +5,19 @@ namespace ThreeDent.DevelopmentTools.Extensions
 {
     public static class VectorExtension
     {
-        /// <summary>
-        /// Changes specified values of vector and returns it.
-        /// </summary>
+        public static void Deconstruct(this Vector2 vector, out float x, out float y)
+        {
+            x = vector.x;
+            y = vector.y;
+        }
+
+        public static void Deconstruct(this Vector3 vector, out float x, out float y, out float z)
+        {
+            x = vector.x;
+            y = vector.y;
+            z = vector.z;
+        }
+
         public static Vector3 With(this Vector3 vector, Option<float> x = default, Option<float> y = default, Option<float> z = default)
         {
             vector.x = Option.ReadOrDefault(x, vector.x);
@@ -16,9 +26,6 @@ namespace ThreeDent.DevelopmentTools.Extensions
             return vector;
         }
 
-        /// <summary>
-        /// Changes specified values of vector and returns it.
-        /// </summary>
         public static Vector2 With(this Vector2 vector, Option<float> x = default, Option<float> y = default)
         {
             vector.x = Option.ReadOrDefault(x, vector.x);
