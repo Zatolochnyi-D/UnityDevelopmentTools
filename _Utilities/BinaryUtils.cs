@@ -1,20 +1,16 @@
 using System;
+using System.Runtime.CompilerServices;
 
 namespace ThreeDent.DevelopmentTools.Utilities
 {
     public static class BinaryUtils
     {
-        /// <summary>
-        /// Returns integer value that represents binary number of 0's and one 1 on provided position.
-        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int GetSingleBitBinary(int position)
         {
             return 1 << position;
         }
 
-        /// <summary>
-        /// Reparates integer number into array of 0's and 1's in little endian format.
-        /// </summary>
         public static int[] SeparateBinary(int binaryNumber, int length)
         {
             if (GetSingleBitBinary(length) <= binaryNumber)

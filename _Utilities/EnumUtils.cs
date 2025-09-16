@@ -1,15 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace ThreeDent.DevelopmentTools.Utilities
 {
     public static class EnumUtils
     {
-        /// <summary>
-        /// Extracts content of specified enum as list of values of this enum type.
-        /// </summary>
-        /// <typeparam name="T">Target enum.</typeparam>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<T> GetValues<T>() where T : Enum
         {
             return Enum.GetValues(typeof(T)).Cast<T>();

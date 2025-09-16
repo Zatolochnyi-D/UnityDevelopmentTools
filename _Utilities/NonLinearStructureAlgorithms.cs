@@ -7,9 +7,6 @@ namespace ThreeDent.DevelopmentTools.Utilities
 {
     public static class NonLinearStructureAlgorithms
     {
-        /// <summary>
-        /// Unfolds tree structure into list using BFS traversing.
-        /// </summary>
         public static IEnumerable<T> TreeBfsUnfold<T>(T root, Func<T, IEnumerable<T>> childrenProvider, bool includeRoot = true)
         {
             var result = new List<T>();
@@ -24,9 +21,6 @@ namespace ThreeDent.DevelopmentTools.Utilities
             return includeRoot ? result : result.Skip(1);
         }
 
-        /// <summary>
-        /// Unfolds tree structure into list using DFS traversing.
-        /// </summary>
         public static IEnumerable<T> TreeDfsUnfold<T>(T root, Func<T, IEnumerable<T>> childrenProvider, bool includeRoot = true)
         {
             var result = new List<T>();
