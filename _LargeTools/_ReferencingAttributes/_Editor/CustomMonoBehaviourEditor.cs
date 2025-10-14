@@ -1,20 +1,13 @@
-using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
-using UnityEditor.UIElements;
 using DenZ.DevelopmentTools.Extensions;
 using DenZ.DevelopmentTools.Utilities;
 
 namespace DenZ.DevelopmentTools.ReferencingAttributes.Editor
 {
-    /// <summary>
-    /// Extension of basic Editor class, that handles custom attributes.
-    /// Custom editors should inherit from this class to have custom attributes work.
-    /// </summary>
     [CustomEditor(typeof(MonoBehaviour), true)]
     public class CustomMonoBehaviourEditor : UnityEditor.Editor
     {
@@ -27,8 +20,9 @@ namespace DenZ.DevelopmentTools.ReferencingAttributes.Editor
         private const string ParentNotFoundMessage = "This script requires this object to have a parent.";
         private const string ParentOnIndexNotFoundMessage = "This script requires this object to have a parent under index {0}, but only {2} parents were found.";
 
-        private GameObject gameObject;
         private readonly List<string> warningMessages = new();
+        private GameObject gameObject;
+        private bool showAutoassignedFields = false;
 
         private static bool HasRequiredAttribute(MemberInfo x)
         {
@@ -39,25 +33,10 @@ namespace DenZ.DevelopmentTools.ReferencingAttributes.Editor
                    x.IsDefined<IsParentAttribute>();
         }
 
-        private static IEnumerable<FieldInfo> GetSerializableFields(Type type)
-        {
-            var fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            var serializableFields = fields.Where(x => x.IsPublic || x.IsDefined<SerializeField>());
-            return serializableFields;
-        }
-
         private static IEnumerable<Transform> ChildProvider(Transform parent)
         {
             foreach (Transform child in parent)
                 yield return child;
-        }
-
-        private void AddFieldsWithoutAttributes(VisualElement root)
-        {
-            GetSerializableFields(target.GetType())
-            .Where(x => !HasRequiredAttribute(x))
-            .Select(x => serializedObject.FindProperty(x.Name))
-            .ForEach(x => root.Add(new PropertyField(x)));
         }
 
         private void HandleOnThisAttribute(FieldInfo field)
@@ -207,15 +186,16 @@ namespace DenZ.DevelopmentTools.ReferencingAttributes.Editor
             serializedObject.ApplyModifiedProperties();
         }
 
-        /// <summary>
-        /// Performs search of all the serializable fields for custom attributes and fills them if possible.
-        /// If not, generates warning message that can be displayed with DisplayWarnings method.
-        /// </summary>
-        protected void HandleCustomAttributes()
+        protected (IEnumerable<FieldInfo> autoassigned, IEnumerable<FieldInfo> other) GetPropertyGroups()
         {
-            var fieldsWithAttribute = GetSerializableFields(target.GetType()).Where(HasRequiredAttribute);
+            var serializableFields = target.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).Where(x => x.IsPublic || x.IsDefined<SerializeField>());
+            var groups = serializableFields.GroupBy(HasRequiredAttribute);
+            return (groups.Where(x => x.Key).SelectMany(x => x), groups.Where(x => !x.Key).SelectMany(x => x));
+        }
 
-            foreach (var field in fieldsWithAttribute)
+        protected void ProcessAutoassignedFields(IEnumerable<FieldInfo> autoassignedFields)
+        {
+            foreach (var field in autoassignedFields)
             {
                 if (field.IsDefined<OnThisAttribute>())
                     HandleOnThisAttribute(field);
@@ -228,25 +208,16 @@ namespace DenZ.DevelopmentTools.ReferencingAttributes.Editor
                 else if (field.IsDefined<IsParentAttribute>())
                     HandleIsParentAttribute(field);
             }
-        }
-
-        /// <summary>
-        /// Displays warnings that occured while handling custom attributes. <br/>
-        /// Call in OnInspectorGUI.
-        /// </summary>
-        protected void DisplayWarnings()
-        {
+            showAutoassignedFields = EditorGUILayout.Foldout(showAutoassignedFields, "Autoassigned fields");
+            if (showAutoassignedFields)
+                autoassignedFields.Select(x => serializedObject.FindProperty(x.Name)).ForEach(x => EditorGUILayout.PropertyField(x));
             warningMessages.ForEach(x => EditorGUILayout.HelpBox(x, MessageType.Warning));
+            warningMessages.Clear();
         }
 
-        /// <summary>
-        /// Displays warnings that occured while handling custom attributes. <br/>
-        /// Call in CreateInspectorGUI.
-        /// </summary>
-        /// <param name="root">Your root VisualElement</param>
-        protected void DisplayWarnings(VisualElement root)
+        protected void ProcessOtherFields(IEnumerable<FieldInfo> otherFields)
         {
-            warningMessages.ForEach(x => root.Add(new HelpBox(x, HelpBoxMessageType.Warning)));
+            otherFields.Select(x => serializedObject.FindProperty(x.Name)).ForEach(x => EditorGUILayout.PropertyField(x));
         }
 
         protected virtual void OnEnable()
@@ -254,20 +225,11 @@ namespace DenZ.DevelopmentTools.ReferencingAttributes.Editor
             gameObject = ((MonoBehaviour)target).gameObject;
         }
 
-        public override VisualElement CreateInspectorGUI()
+        public override void OnInspectorGUI()
         {
-            if (CustomMonoBehaviourEditorUsageController.UseCustomMonoBehaviourEditor)
-            {
-                var root = new VisualElement();
-                HandleCustomAttributes();
-                DisplayWarnings(root);
-                AddFieldsWithoutAttributes(root);
-                return root;
-            }
-            else
-            {
-                return null;
-            }
+            var (autoassignedFields, otherFields) = GetPropertyGroups();
+            ProcessAutoassignedFields(autoassignedFields);
+            ProcessOtherFields(otherFields);
         }
     }
 }

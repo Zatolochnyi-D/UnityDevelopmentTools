@@ -4,9 +4,6 @@ using UnityEngine.UI;
 
 namespace DenZ.DevelopmentTools.GridLayoutGroupTools
 {
-    /// <summary>
-    /// Links GridLayoutGroup cell size with object's rect transform size.
-    /// </summary>
     public class GridLayoutGroupCellSizeController : MonoBehaviour
     {
         [OnThis, SerializeField] private GridLayoutGroup gridLayout;

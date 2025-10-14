@@ -1,7 +1,6 @@
 using DenZ.DevelopmentTools.GridLayoutGroupTools;
 using DenZ.DevelopmentTools.ReferencingAttributes.Editor;
 using UnityEditor;
-using UnityEngine.UIElements;
 
 namespace DenZ.Helpers.Tools.GridLayoutGroupTools.Editor
 {
@@ -16,15 +15,10 @@ namespace DenZ.Helpers.Tools.GridLayoutGroupTools.Editor
             controller = (GridLayoutGroupCellSizeController)target;
         }
 
-        public override VisualElement CreateInspectorGUI()
-        {
-            return null;
-        }
-
         public override void OnInspectorGUI()
         {
-            HandleCustomAttributes();
-            DisplayWarnings();
+            var (fields, _) = GetPropertyGroups();
+            ProcessAutoassignedFields(fields);
             controller.GridCellSizeToRectTransformSize();
         }
     }
