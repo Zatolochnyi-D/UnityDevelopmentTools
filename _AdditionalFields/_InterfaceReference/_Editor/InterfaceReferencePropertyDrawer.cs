@@ -1,9 +1,9 @@
 using System.Linq;
-using ThreeDent.DevelopmentTools.InterfaceReference;
+using DenZ.DevelopmentTools.InterfaceReference;
 using UnityEditor;
 using UnityEngine;
 
-namespace ThreeDent.Helpers.Tools.InterfaceReference.Editor
+namespace DenZ.Helpers.Tools.InterfaceReference.Editor
 {
     [CustomPropertyDrawer(typeof(InterfaceReference<>))]
     public class InterfaceReferencePropertyDrawer : PropertyDrawer
@@ -17,7 +17,7 @@ namespace ThreeDent.Helpers.Tools.InterfaceReference.Editor
             // MonoBehaviour field, that should be filled in process.
             SerializedProperty script = property.FindPropertyRelative(PropertyName);
             // Field is InterfaceReference<T>, it always have 1 generic type.
-            // This type is needed to validate, that provided object implements type T. 
+            // This type is needed to validate, that provided object inherits type T. 
             System.Type fieldGenericType = fieldInfo.FieldType.GenericTypeArguments[0];
 
             // Inspector field accepts Object type, meaning any Unity object is apropriate for this field. Additional filtering required.
