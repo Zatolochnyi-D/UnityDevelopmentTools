@@ -1,6 +1,6 @@
 using System;
 
-namespace ThreeDent.DevelopmentTools.Utilities
+namespace DenZ.DevelopmentTools.Utilities
 {
     public static class ArrayUtils
     {

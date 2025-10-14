@@ -2,7 +2,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-namespace ThreeDent.DevelopmentTools.Utilities.Editor
+namespace DenZ.DevelopmentTools.Utilities.Editor
 {
     public static class EditorUtils
     {

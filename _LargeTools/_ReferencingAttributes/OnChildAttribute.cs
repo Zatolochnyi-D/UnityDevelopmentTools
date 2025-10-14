@@ -1,6 +1,6 @@
 using System;
 
-namespace ThreeDent.DevelopmentTools.ReferencingAttributes
+namespace DenZ.DevelopmentTools.ReferencingAttributes
 {
     /// <summary>
     /// Marks field to be filled with first matching component on one of this object's children.

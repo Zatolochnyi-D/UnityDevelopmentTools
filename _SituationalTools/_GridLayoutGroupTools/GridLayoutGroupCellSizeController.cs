@@ -1,8 +1,8 @@
-using ThreeDent.DevelopmentTools.ReferencingAttributes;
+using DenZ.DevelopmentTools.ReferencingAttributes;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ThreeDent.DevelopmentTools.GridLayoutGroupTools
+namespace DenZ.DevelopmentTools.GridLayoutGroupTools
 {
     /// <summary>
     /// Links GridLayoutGroup cell size with object's rect transform size.

@@ -1,7 +1,7 @@
 using UnityEngine;
 using Unity.Cinemachine;
 
-namespace ThreeDent.DevelopmentTools.CinemachineExtensions
+namespace DenZ.DevelopmentTools.CinemachineExtensions
 {
     [SaveDuringPlay, AddComponentMenu("")]
     public class ConfinerLimitationsToVirtualCamera : CinemachineExtension

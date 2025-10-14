@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace ThreeDent.DevelopmentTools.Extensions
+namespace DenZ.DevelopmentTools.Extensions
 {
     public static class CollectionRandomExtension
     {

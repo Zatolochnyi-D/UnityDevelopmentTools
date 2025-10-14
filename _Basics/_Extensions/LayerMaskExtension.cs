@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace ThreeDent.DevelopmentTools.Extensions
+namespace DenZ.DevelopmentTools.Extensions
 {
     public static class LayerMaskExtension
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-namespace ThreeDent.DevelopmentTools.Extensions
+namespace DenZ.DevelopmentTools.Extensions
 {
     public static class LinqExtension
     {

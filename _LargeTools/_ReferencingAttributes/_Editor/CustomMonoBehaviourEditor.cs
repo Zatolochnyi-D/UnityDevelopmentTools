@@ -6,10 +6,10 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
-using ThreeDent.DevelopmentTools.Extensions;
-using ThreeDent.DevelopmentTools.Utilities;
+using DenZ.DevelopmentTools.Extensions;
+using DenZ.DevelopmentTools.Utilities;
 
-namespace ThreeDent.DevelopmentTools.ReferencingAttributes.Editor
+namespace DenZ.DevelopmentTools.ReferencingAttributes.Editor
 {
     /// <summary>
     /// Extension of basic Editor class, that handles custom attributes.

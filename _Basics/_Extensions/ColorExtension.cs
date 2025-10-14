@@ -1,7 +1,7 @@
-using ThreeDent.DevelopmentTools.Options;
+using DenZ.DevelopmentTools.Options;
 using UnityEngine;
 
-namespace ThreeDent.DevelopmentTools.Extensions
+namespace DenZ.DevelopmentTools.Extensions
 {
     public static class ColorExtension
     {

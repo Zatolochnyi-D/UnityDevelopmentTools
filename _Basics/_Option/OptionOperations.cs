@@ -1,6 +1,6 @@
 using System;
 
-namespace ThreeDent.DevelopmentTools.Options
+namespace DenZ.DevelopmentTools.Options
 {
     public static class Option
     {

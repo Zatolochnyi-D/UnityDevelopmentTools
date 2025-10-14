@@ -1,7 +1,7 @@
-using ThreeDent.DevelopmentTools.Singleton.Exceptions;
+using DenZ.DevelopmentTools.Singleton.Exceptions;
 using UnityEngine;
 
-namespace ThreeDent.DevelopmentTools.Singleton
+namespace DenZ.DevelopmentTools.Singleton
 {
     public class Singleton<T> : MonoBehaviour where T : Singleton<T>
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ThreeDent.DevelopmentTools.ObjectPooling
+namespace DenZ.DevelopmentTools.ObjectPooling
 {
     public class GameObjectPool : ConfigurableObjectPool<GameObject>
     {

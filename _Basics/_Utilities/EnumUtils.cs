@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-namespace ThreeDent.DevelopmentTools.Utilities
+namespace DenZ.DevelopmentTools.Utilities
 {
     public static class EnumUtils
     {

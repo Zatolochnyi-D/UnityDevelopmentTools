@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 
-namespace ThreeDent.DevelopmentTools.Extensions
+namespace DenZ.DevelopmentTools.Extensions
 {
     public static class ComparableExtension
     {

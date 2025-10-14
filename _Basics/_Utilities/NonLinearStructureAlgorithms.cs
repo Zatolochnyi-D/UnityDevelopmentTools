@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ThreeDent.DevelopmentTools.Extensions;
+using DenZ.DevelopmentTools.Extensions;
 
-namespace ThreeDent.DevelopmentTools.Utilities
+namespace DenZ.DevelopmentTools.Utilities
 {
     public static class NonLinearStructureAlgorithms
     {

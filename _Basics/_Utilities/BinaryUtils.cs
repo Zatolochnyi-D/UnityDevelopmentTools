@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 
-namespace ThreeDent.DevelopmentTools.Utilities
+namespace DenZ.DevelopmentTools.Utilities
 {
     public static class BinaryUtils
     {

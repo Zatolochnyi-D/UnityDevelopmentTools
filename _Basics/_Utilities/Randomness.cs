@@ -1,12 +1,15 @@
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-// Extends UnityEngine.Random
-public static class Randomness
+namespace DenZ.DevelopmentTools.Utilities
 {
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Vector2Int PointInSquare(int minXInclusive, int minYInclusive, int maxXExclusive, int maxYExclusive)
+    // Extends UnityEngine.Random
+    public static class Randomness
     {
-        return new(Random.Range(minXInclusive, maxXExclusive), Random.Range(minYInclusive, maxYExclusive));
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2Int PointInSquare(int minXInclusive, int minYInclusive, int maxXExclusive, int maxYExclusive)
+        {
+            return new(Random.Range(minXInclusive, maxXExclusive), Random.Range(minYInclusive, maxYExclusive));
+        }
     }
 }

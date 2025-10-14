@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ThreeDent.DevelopmentTools.Utilities
+namespace DenZ.DevelopmentTools.Utilities
 {
     public static class AudioUtils
     {

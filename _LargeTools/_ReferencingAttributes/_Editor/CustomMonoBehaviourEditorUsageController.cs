@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace ThreeDent.DevelopmentTools.ReferencingAttributes.Editor
+namespace DenZ.DevelopmentTools.ReferencingAttributes.Editor
 {
     public class CustomMonoBehaviourEditorUsageController : ScriptableSingleton<CustomMonoBehaviourEditorUsageController>
     {

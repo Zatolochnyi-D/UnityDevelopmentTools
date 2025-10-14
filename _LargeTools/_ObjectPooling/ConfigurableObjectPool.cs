@@ -1,6 +1,6 @@
 using UnityEngine.Pool;
 
-namespace ThreeDent.DevelopmentTools.ObjectPooling
+namespace DenZ.DevelopmentTools.ObjectPooling
 {
     public abstract class ConfigurableObjectPool<T> where T : class
     {
