@@ -1,6 +1,6 @@
 {
-    "name": "ThreeDent.DevelopmentTools",
-    "rootNamespace": "ThreeDent.DevelopmentTools",
+    "name": "DenZ.DevelopmentTools",
+    "rootNamespace": "DenZ.DevelopmentTools",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

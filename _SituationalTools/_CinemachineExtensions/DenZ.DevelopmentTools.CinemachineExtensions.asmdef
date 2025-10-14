@@ -1,6 +1,6 @@
 {
-    "name": "ThreeDent.DevelopmentTools.CinemachineExtensions",
-    "rootNamespace": "ThreeDent.DevelopmentTools.CinemachineExtensions",
+    "name": " DenZ.DevelopmentTools.CinemachineExtensions",
+    "rootNamespace": "DenZ.DevelopmentTools.CinemachineExtensions",
     "references": [
         "GUID:4307f53044263cf4b835bd812fc161a4"
     ],

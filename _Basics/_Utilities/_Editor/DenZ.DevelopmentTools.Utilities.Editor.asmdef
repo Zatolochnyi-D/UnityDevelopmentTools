@@ -1,9 +1,7 @@
 {
-    "name": "ThreeDent.DevelopmentTools.InterfaceReference.Editor",
-    "rootNamespace": "ThreeDent.DevelopmentTools.InterfaceReference.Editor",
-    "references": [
-        "GUID:6be00617ce03047a99c7517cf89fc338"
-    ],
+    "name": "DenZ.DevelopmentTools.Utilities.Editor",
+    "rootNamespace": "DenZ.DevelopmentTools.Utilities.Editor",
+    "references": [],
     "includePlatforms": [
         "Editor"
     ],

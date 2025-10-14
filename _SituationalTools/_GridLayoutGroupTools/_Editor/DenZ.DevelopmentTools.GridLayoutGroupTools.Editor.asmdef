@@ -1,7 +1,8 @@
 {
-    "name": "ThreeDent.DevelopmentTools.ReferencingAttributes.Editor",
-    "rootNamespace": "ThreeDent.DevelopmentTools.ReferencingAttributes.Editor",
+    "name": "DenZ.DevelopmentTools.GridLayoutGroupTools.Editor",
+    "rootNamespace": "DenZ.DevelopmentTools.GridLayoutGroupTools.Editor",
     "references": [
+        "GUID:4a1d8b33a13194cf2a486323f8d45cb7",
         "GUID:6be00617ce03047a99c7517cf89fc338"
     ],
     "includePlatforms": [
