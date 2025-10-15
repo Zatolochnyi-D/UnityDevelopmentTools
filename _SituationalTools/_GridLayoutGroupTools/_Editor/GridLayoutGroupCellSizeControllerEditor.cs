@@ -2,7 +2,7 @@ using DenZ.DevelopmentTools.GridLayoutGroupTools;
 using DenZ.DevelopmentTools.ReferencingAttributes.Editor;
 using UnityEditor;
 
-namespace DenZ.Helpers.Tools.GridLayoutGroupTools.Editor
+namespace DenZ.DevelopmentTools.Tools.GridLayoutGroupTools.Editor
 {
     [CustomEditor(typeof(GridLayoutGroupCellSizeController))]
     public class GridLayoutGroupCellSizeControllerEditor : CustomMonoBehaviourEditor
