@@ -208,9 +208,12 @@ namespace DenZ.DevelopmentTools.ReferencingAttributes.Editor
                 else if (field.IsDefined<IsParentAttribute>())
                     HandleIsParentAttribute(field);
             }
-            showAutoassignedFields = EditorGUILayout.Foldout(showAutoassignedFields, "Autoassigned fields");
-            if (showAutoassignedFields)
-                autoassignedFields.Select(x => serializedObject.FindProperty(x.Name)).ForEach(x => EditorGUILayout.PropertyField(x));
+            if (autoassignedFields.Any())
+            {
+                showAutoassignedFields = EditorGUILayout.Foldout(showAutoassignedFields, "Autoassigned fields");
+                if (showAutoassignedFields)
+                    autoassignedFields.Select(x => serializedObject.FindProperty(x.Name)).ForEach(x => EditorGUILayout.PropertyField(x));
+            }
             warningMessages.ForEach(x => EditorGUILayout.HelpBox(x, MessageType.Warning));
             warningMessages.Clear();
         }
