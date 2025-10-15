@@ -233,6 +233,7 @@ namespace DenZ.DevelopmentTools.ReferencingAttributes.Editor
             var (autoassignedFields, otherFields) = GetPropertyGroups();
             ProcessAutoassignedFields(autoassignedFields);
             ProcessOtherFields(otherFields);
+            serializedObject.ApplyModifiedProperties();
         }
     }
 }
