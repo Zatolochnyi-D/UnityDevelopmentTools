@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using DenZ.DevelopmentTools.Options;
 using UnityEngine;
 
@@ -31,6 +32,12 @@ namespace DenZ.DevelopmentTools.Extensions
             vector.x = x.ReadOrDefault(vector.x);
             vector.y = y.ReadOrDefault(vector.y);
             return vector;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3Int AsX0Z(this Vector2Int vector)
+        {
+            return new(vector.x, 0, vector.y);
         }
     }
 }
