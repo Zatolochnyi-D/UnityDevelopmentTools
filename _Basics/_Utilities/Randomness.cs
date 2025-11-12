@@ -11,5 +11,11 @@ namespace DenZ.DevelopmentTools.Utilities
         {
             return new(Random.Range(minXInclusive, maxXExclusive), Random.Range(minYInclusive, maxYExclusive));
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int Range(int minInclusive, int maxExclusive)
+        {
+            return Random.Range(minInclusive, maxExclusive);
+        }
     }
 }
