@@ -1,3 +1,5 @@
+using System;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,15 +9,16 @@ namespace DenZ.DevelopmentTools.InputSystem
     {
         public ValueContinuousControl(InputAction inputAction) : base(inputAction)
         {
-            FireContinuously();
+            FireContinuously(Awaitable.NextFrameAsync, FireOnPerformed);
+            FireContinuously(Awaitable.FixedUpdateAsync, FireOnPerformedFixed);
         }
 
-        private async void FireContinuously()
+        private async void FireContinuously(Func<CancellationToken, Awaitable> waitingFunc, Action<T> callback)
         {
             while (true)
             {
-                FireOnPerformed(Value);
-                await Awaitable.NextFrameAsync();
+                callback(Value);
+                await waitingFunc(default);
             }
         }
     }

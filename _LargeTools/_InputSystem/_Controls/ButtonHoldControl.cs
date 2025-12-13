@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -18,7 +19,8 @@ namespace DenZ.DevelopmentTools.InputSystem
         {
             _eventCancellation?.Cancel();
             _eventCancellation = new();
-            FireContinuously(_eventCancellation.Token);
+            FireContinuously(_eventCancellation.Token, Awaitable.NextFrameAsync, FireOnPerformed);
+            FireContinuously(_eventCancellation.Token, Awaitable.FixedUpdateAsync, FireOnPerformedFixed);
         }
 
         private void Cancel()
@@ -26,14 +28,14 @@ namespace DenZ.DevelopmentTools.InputSystem
             _eventCancellation?.Cancel();
         }
 
-        private async void FireContinuously(CancellationToken token)
+        private async void FireContinuously(CancellationToken token, Func<CancellationToken, Awaitable> waitingFunc, Action callback)
         {
             while (true)
             {
                 if (token.IsCancellationRequested)
                     return;
-                FireOnPerformed();
-                await Awaitable.NextFrameAsync();
+                callback();
+                await waitingFunc(default);
             }
         }
     }

@@ -8,6 +8,7 @@ namespace DenZ.DevelopmentTools.InputSystem
         public event Action OnStarted;
         public event Action OnCanceled;
         public event Action OnPerformed;
+        public event Action OnPerformedFixed;
 
         protected InputAction _inputAction;
 
@@ -34,6 +35,11 @@ namespace DenZ.DevelopmentTools.InputSystem
         {
             OnPerformed?.Invoke();
         }
+
+        protected void FireOnPerformedFixed()
+        {
+            OnPerformedFixed?.Invoke();
+        }
     }
 
     public abstract class InputControl<T> where T : struct
@@ -41,6 +47,7 @@ namespace DenZ.DevelopmentTools.InputSystem
         public event Action OnStarted;
         public event Action OnCanceled;
         public event Action<T> OnPerformed;
+        public event Action<T> OnPerformedFixed;
 
         protected InputAction _inputAction;
 
@@ -66,6 +73,11 @@ namespace DenZ.DevelopmentTools.InputSystem
         protected void FireOnPerformed(T args)
         {
             OnPerformed?.Invoke(args);
+        }
+
+        protected void FireOnPerformedFixed(T args)
+        {
+            OnPerformedFixed?.Invoke(args);
         }
     }
 }
