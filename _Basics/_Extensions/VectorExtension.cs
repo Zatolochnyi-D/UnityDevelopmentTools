@@ -35,6 +35,15 @@ namespace DenZ.DevelopmentTools.Extensions
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3 AsX0Z(this Vector2 vector)
+        {
+            return new(vector.x, 0f, vector.y);
+        }
+    }
+
+    public static class VectorIntExtension
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3Int AsX0Z(this Vector2Int vector)
         {
             return new(vector.x, 0, vector.y);
