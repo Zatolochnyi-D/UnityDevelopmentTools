@@ -8,19 +8,25 @@ namespace DenZ.DevelopmentTools.InputSystem
     public class ButtonHoldControl : InputControl
     {
         private CancellationTokenSource _eventCancellation;
+        private readonly Func<CancellationToken, Awaitable> waitingFunc;
 
-        public ButtonHoldControl(InputAction inputAction) : base(inputAction)
+        public ButtonHoldControl(InputAction inputAction, UpdateType updateType = UpdateType.Default) : base(inputAction)
         {
             _inputAction.performed += (_) => Start();
             _inputAction.canceled += (_) => Cancel();
+            waitingFunc = updateType switch
+            {
+                UpdateType.Default => Awaitable.NextFrameAsync,
+                UpdateType.Fixed => Awaitable.FixedUpdateAsync,
+                _ => throw FastExeptions.NonExistentEnumValue<UpdateType>(),
+            };
         }
 
         private void Start()
         {
             _eventCancellation?.Cancel();
             _eventCancellation = new();
-            FireContinuously(_eventCancellation.Token, Awaitable.NextFrameAsync, FireOnPerformed);
-            FireContinuously(_eventCancellation.Token, Awaitable.FixedUpdateAsync, FireOnPerformedFixed);
+            FireContinuously(_eventCancellation.Token);
         }
 
         private void Cancel()
@@ -28,13 +34,13 @@ namespace DenZ.DevelopmentTools.InputSystem
             _eventCancellation?.Cancel();
         }
 
-        private async void FireContinuously(CancellationToken token, Func<CancellationToken, Awaitable> waitingFunc, Action callback)
+        private async void FireContinuously(CancellationToken token)
         {
             while (true)
             {
                 if (token.IsCancellationRequested)
                     return;
-                callback();
+                FireOnPerformed();
                 await waitingFunc(default);
             }
         }

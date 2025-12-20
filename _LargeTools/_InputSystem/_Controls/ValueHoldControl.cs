@@ -1,6 +1,5 @@
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,19 +8,25 @@ namespace DenZ.DevelopmentTools.InputSystem
     public class ValueHoldControl<T> : InputControl<T> where T : struct
     {
         private CancellationTokenSource _eventCancellation;
+        private readonly Func<CancellationToken, Awaitable> waitingFunc;
 
-        public ValueHoldControl(InputAction inputAction) : base(inputAction)
+        public ValueHoldControl(InputAction inputAction, UpdateType updateType = UpdateType.Default) : base(inputAction)
         {
             _inputAction.performed += (_) => Start();
             _inputAction.canceled += (_) => Cancel();
+            waitingFunc = updateType switch
+            {
+                UpdateType.Default => Awaitable.NextFrameAsync,
+                UpdateType.Fixed => Awaitable.FixedUpdateAsync,
+                _ => throw FastExeptions.NonExistentEnumValue<UpdateType>(),
+            };
         }
 
         private void Start()
         {
             _eventCancellation?.Cancel();
             _eventCancellation = new();
-            FireContinuously(_eventCancellation.Token, Awaitable.NextFrameAsync, FireOnPerformed);
-            FireContinuously(_eventCancellation.Token, Awaitable.FixedUpdateAsync, FireOnPerformedFixed);
+            FireContinuously(_eventCancellation.Token);
         }
 
         private void Cancel()
@@ -29,13 +34,13 @@ namespace DenZ.DevelopmentTools.InputSystem
             _eventCancellation?.Cancel();
         }
 
-        private async void FireContinuously(CancellationToken cancellationToken, Func<CancellationToken, Awaitable> waitingFunc, Action<T> callback)
+        private async void FireContinuously(CancellationToken cancellationToken)
         {
             while (true)
             {
                 if (cancellationToken.IsCancellationRequested)
                     return;
-                callback(Value);
+                FireOnPerformed(Value);
                 await waitingFunc(default);
             }
         }
