@@ -7,16 +7,11 @@ namespace DenZ.DevelopmentTools.InputSystem
 {
     public class ValueContinuousControl<T> : InputControl<T> where T : struct
     {
-        private readonly Func<CancellationToken, Awaitable> waitingFunc;
+        private readonly Func<CancellationToken, Awaitable> _waitMethod;
 
         public ValueContinuousControl(InputAction inputAction, UpdateType updateType = UpdateType.Default) : base(inputAction)
         {
-            waitingFunc = updateType switch
-            {
-                UpdateType.Default => Awaitable.NextFrameAsync,
-                UpdateType.Fixed => Awaitable.FixedUpdateAsync,
-                _ => throw FastExeptions.NonExistentEnumValue<UpdateType>(),
-            };
+            _waitMethod = InputSystemUtils.GetWaitMethodFactory(updateType);
             FireContinuously();
         }
 
@@ -25,7 +20,7 @@ namespace DenZ.DevelopmentTools.InputSystem
             while (true)
             {
                 FireOnPerformed(Value);
-                await waitingFunc(default);
+                await _waitMethod(default);
             }
         }
     }
