@@ -3,25 +3,25 @@ using UnityEngine.InputSystem;
 
 namespace DenZ.DevelopmentTools.InputSystem
 {
-    public interface IInputControl
+    public interface IInputControl<T> where T : struct
     {
         public event Action OnStarted;
         public event Action OnCanceled;
-        public event Action OnPerformed;
+        public event Action<T> OnPerformed;
 
-        public bool Value { get; }
+        public T Value { get; }
     }
 
 
-    public abstract class InputControl : IInputControl
+    public abstract class InputControl<T> : IInputControl<T> where T : struct
     {
         public event Action OnStarted;
         public event Action OnCanceled;
-        public event Action OnPerformed;
+        public event Action<T> OnPerformed;
 
         protected InputAction _inputAction;
 
-        public virtual bool Value => _inputAction.ReadValue<float>() == 1f;
+        public virtual T Value => _inputAction.ReadValue<T>();
 
         public InputControl(InputAction inputAction)
         {
@@ -40,9 +40,17 @@ namespace DenZ.DevelopmentTools.InputSystem
             OnCanceled?.Invoke();
         }
 
-        protected void FireOnPerformed()
+        protected void FireOnPerformed(T args)
         {
-            OnPerformed?.Invoke();
+            OnPerformed?.Invoke(args);
         }
+    }
+    
+
+    public abstract class InputControl : InputControl<bool>
+    {
+        public override bool Value => _inputAction.ReadValue<float>() == 1f;
+
+        public InputControl(InputAction inputAction) : base(inputAction) { }
     }
 }

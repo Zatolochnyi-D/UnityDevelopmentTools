@@ -35,7 +35,7 @@ namespace DenZ.DevelopmentTools.InputSystem
             {
                 if (token.IsCancellationRequested)
                     return;
-                FireOnPerformed();
+                FireOnPerformed(Value);
                 await _waitMethod(default);
             }
         }
