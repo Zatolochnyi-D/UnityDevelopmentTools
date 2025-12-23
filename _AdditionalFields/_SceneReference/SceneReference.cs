@@ -29,7 +29,6 @@ namespace DenZ.DevelopmentTools.SceneReference
         public static bool operator ==(SceneReference a, SceneReference b)
         {
             return Equals(a, b);
-            // return a.Equals(b);
         }
 
         public static bool operator !=(SceneReference a, SceneReference b)
