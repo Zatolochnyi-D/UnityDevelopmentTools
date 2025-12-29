@@ -1,4 +1,3 @@
-using DenZ.DevelopmentTools.ReferencingAttributes;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,8 +5,8 @@ namespace DenZ.DevelopmentTools.GridLayoutGroupTools
 {
     public class GridLayoutGroupCellSizeController : MonoBehaviour
     {
-        [OnThis, SerializeField] private GridLayoutGroup gridLayout;
-        [OnThis, SerializeField] private RectTransform rectTransform;
+        [SerializeField] private GridLayoutGroup gridLayout;
+        [SerializeField] private RectTransform rectTransform;
 
         public void GridCellSizeToRectTransformSize()
         {

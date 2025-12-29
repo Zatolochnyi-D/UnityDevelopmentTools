@@ -1,24 +1,20 @@
 using DenZ.DevelopmentTools.GridLayoutGroupTools;
-using DenZ.DevelopmentTools.ReferencingAttributes.Editor;
 using UnityEditor;
 
 namespace DenZ.DevelopmentTools.Tools.GridLayoutGroupTools.Editor
 {
     [CustomEditor(typeof(GridLayoutGroupCellSizeController))]
-    public class GridLayoutGroupCellSizeControllerEditor : CustomMonoBehaviourEditor
+    public class GridLayoutGroupCellSizeControllerEditor : UnityEditor.Editor
     {
         private GridLayoutGroupCellSizeController controller;
 
-        protected override void OnEnable()
+        void OnEnable()
         {
-            base.OnEnable();
             controller = (GridLayoutGroupCellSizeController)target;
         }
 
         public override void OnInspectorGUI()
         {
-            var (fields, _) = GetPropertyGroups();
-            ProcessAutoassignedFields(fields);
             controller.GridCellSizeToRectTransformSize();
         }
     }
