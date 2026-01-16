@@ -1,11 +1,17 @@
 using UnityEngine;
 using Zenject;
 
-namespace Apartment664.Universal
+namespace DenZ.DevelopmentTools.Di
 {
     public class DependenciesRetriever : MonoBehaviour
     {
-        [Inject] private DiContainer _container;
+        private DiContainer _container;
+
+        [Inject]
+        public void Construct(DiContainer container)
+        {
+            _container = container;
+        }
 
         public T Resolve<T>()
         {

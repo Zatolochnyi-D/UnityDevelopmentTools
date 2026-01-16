@@ -1,4 +1,4 @@
-namespace Apartment664.Universal
+namespace DenZ.DevelopmentTools.Di
 {
     public class TypeWrapper<T>
     {

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Zenject;
 
-namespace Apartment664.Universal
+namespace DenZ.DevelopmentTools.Di
 {
     public static class DiSourcesExtension
     {

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Apartment664.Universal
+namespace DenZ.DevelopmentTools.Di
 {
     public abstract class ComponentMarker<T> : MonoBehaviour where T : Component
     {
