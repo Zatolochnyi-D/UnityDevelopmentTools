@@ -18,7 +18,7 @@ namespace DenZ.DevelopmentTools.Di
             return binder.FromMethod(() =>
             {
                 var component = Option.FromPossibleNull(markerSource.GetComponentInChildren<TMarker>())
-                                      .ReadOrThrow(new InvalidOperationException($"Marker {typeof(TMarker)} was not attached"))
+                                      .ReadOrThrow(new ZenjectException($"Marker {typeof(TMarker)} was not attached"))
                                       .Component;
                 return factory(component);
             });
@@ -33,7 +33,7 @@ namespace DenZ.DevelopmentTools.Di
             return binder.FromMethod(() =>
             {
                 var component = Option.FromPossibleNull(UnityEngine.Object.FindAnyObjectByType<TMarker>())
-                                      .ReadOrThrow(new InvalidOperationException($"Marker {typeof(TMarker)} was not attached"))
+                                      .ReadOrThrow(new ZenjectException($"Marker {typeof(TMarker)} was not attached"))
                                       .Component;
                 return factory(component);
             });
