@@ -40,7 +40,7 @@ namespace DenZ.DevelopmentTools.Options
         }
 
 
-        public static void Iterate<T>(this Option<T> option, Action<T> actionFunction)
+        public static void Apply<T>(this Option<T> option, Action<T> actionFunction)
         {
             if (option.IsSome)
                 actionFunction(option.Value);
