@@ -6,6 +6,7 @@ namespace DenZ.DevelopmentTools.InputSystem
 {
     public class ExternalHoldControl<T> : IInputControl<T> where T : struct
     {
+        public event Action OnInitiated;
         public event Action OnStarted;
         public event Action OnCanceled;
         public event Action<T> OnPerformed;
@@ -19,7 +20,7 @@ namespace DenZ.DevelopmentTools.InputSystem
         public ExternalHoldControl(Func<T> valueGetter, UpdateType updateType = UpdateType.Default)
         {
             _valueGetter = valueGetter;
-            _waitMethod = InputSystemUtils.GetWaitMethodFactory(updateType);
+            _waitMethod = InputSystemUtils.GetProperAwaitableWaitMethod(updateType);
             CheckForChangesContinuouslyAsync();
         }
 
@@ -36,6 +37,7 @@ namespace DenZ.DevelopmentTools.InputSystem
                     }
                     else
                     {
+                        OnInitiated?.Invoke();
                         OnStarted?.Invoke();
                     }
                 }

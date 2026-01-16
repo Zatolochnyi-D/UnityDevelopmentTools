@@ -11,7 +11,7 @@ namespace DenZ.DevelopmentTools.InputSystem
 
         public ValueContinuousControl(InputAction inputAction, UpdateType updateType = UpdateType.Default) : base(inputAction)
         {
-            _waitMethod = InputSystemUtils.GetWaitMethodFactory(updateType);
+            _waitMethod = InputSystemUtils.GetProperAwaitableWaitMethod(updateType);
             FireContinuously();
         }
 

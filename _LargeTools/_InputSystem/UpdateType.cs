@@ -12,7 +12,7 @@ namespace DenZ.DevelopmentTools.InputSystem
 
     public static class InputSystemUtils
     {
-        public static Func<CancellationToken, Awaitable> GetWaitMethodFactory(UpdateType updateType)
+        public static Func<CancellationToken, Awaitable> GetProperAwaitableWaitMethod(UpdateType updateType)
         {
             return updateType switch
             {

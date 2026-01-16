@@ -5,16 +5,16 @@ using UnityEngine.InputSystem;
 
 namespace DenZ.DevelopmentTools.InputSystem
 {
-    public class ButtonHoldControl : InputControl
+    public class ValueHoldControl<T> : InputControl<T> where T : struct
     {
         private readonly Func<CancellationToken, Awaitable> _waitMethod;
         private CancellationTokenSource _eventCancellation;
 
-        public ButtonHoldControl(InputAction inputAction, UpdateType updateType = UpdateType.Default) : base(inputAction)
+        public ValueHoldControl(InputAction inputAction, UpdateType updateType = UpdateType.Default) : base(inputAction)
         {
             _inputAction.performed += (_) => Start();
             _inputAction.canceled += (_) => Cancel();
-            _waitMethod = InputSystemUtils.GetWaitMethodFactory(updateType);
+            _waitMethod = InputSystemUtils.GetProperAwaitableWaitMethod(updateType);
         }
 
         private void Start()
@@ -29,11 +29,11 @@ namespace DenZ.DevelopmentTools.InputSystem
             _eventCancellation?.Cancel();
         }
 
-        private async void FireContinuously(CancellationToken token)
+        private async void FireContinuously(CancellationToken cancellationToken)
         {
             while (true)
             {
-                if (token.IsCancellationRequested)
+                if (cancellationToken.IsCancellationRequested)
                     return;
                 FireOnPerformed(Value);
                 await _waitMethod(default);
