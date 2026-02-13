@@ -1,6 +1,6 @@
 namespace DenZ.DevelopmentTools.Di
 {
-    public class TypeWrapper<T>
+    public abstract class TypeWrapper<T>
     {
         protected T _value;
 

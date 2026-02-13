@@ -39,6 +39,7 @@ namespace DenZ.DevelopmentTools.Di
             });
         }
 
+        // TODO: find a way to avoid strings.
         public static ScopeConcreteIdArgConditionCopyNonLazyBinder FromAddressable<T>(this ConcreteBinderGeneric<T> binder)
         {
             return binder.FromMethod(() =>
