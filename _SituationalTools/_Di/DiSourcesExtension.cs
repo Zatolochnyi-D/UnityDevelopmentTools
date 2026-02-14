@@ -1,7 +1,7 @@
 using System;
 using DenZ.DevelopmentTools.Options;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
+// using UnityEngine.AddressableAssets;
 using Zenject;
 
 namespace DenZ.DevelopmentTools.Di
@@ -40,20 +40,20 @@ namespace DenZ.DevelopmentTools.Di
         }
 
         // TODO: find a way to avoid strings.
-        public static ScopeConcreteIdArgConditionCopyNonLazyBinder FromAddressable<T>(this ConcreteBinderGeneric<T> binder)
-        {
-            return binder.FromMethod(() =>
-            {
-                return Addressables.LoadAssetAsync<T>(typeof(T).Name).WaitForCompletion();
-            });
-        }
+        // public static ScopeConcreteIdArgConditionCopyNonLazyBinder FromAddressable<T>(this ConcreteBinderGeneric<T> binder)
+        // {
+        //     return binder.FromMethod(() =>
+        //     {
+        //         return Addressables.LoadAssetAsync<T>(typeof(T).Name).WaitForCompletion();
+        //     });
+        // }
 
-        public static ScopeConcreteIdArgConditionCopyNonLazyBinder FromAddressablePrefab<TWrapper>(this ConcreteBinderGeneric<TWrapper> binder, Func<GameObject, TWrapper> factory)
-        {
-            return binder.FromMethod(() =>
-            {
-                return factory(Addressables.LoadAssetAsync<GameObject>(typeof(TWrapper).Name).WaitForCompletion());
-            });
-        }
+        // public static ScopeConcreteIdArgConditionCopyNonLazyBinder FromAddressablePrefab<TWrapper>(this ConcreteBinderGeneric<TWrapper> binder, Func<GameObject, TWrapper> factory)
+        // {
+        //     return binder.FromMethod(() =>
+        //     {
+        //         return factory(Addressables.LoadAssetAsync<GameObject>(typeof(TWrapper).Name).WaitForCompletion());
+        //     });
+        // }
     }
 }
