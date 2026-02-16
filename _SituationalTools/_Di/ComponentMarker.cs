@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace DenZ.DevelopmentTools.Di
 {
-    public abstract class ComponentMarker<T> : MonoBehaviour where T : Component
+    public abstract class ComponentMarker<T, TWrapper> : MonoBehaviour where T : Component where TWrapper : TypeWrapper<T>
     {
         public T Component
         {
@@ -15,5 +15,7 @@ namespace DenZ.DevelopmentTools.Di
                     throw new InvalidOperationException($"Marker {GetType()} failed to get component from its Game Object.");
             }
         }
+
+        public abstract TWrapper WrappedComponent { get; }
     }
 }
