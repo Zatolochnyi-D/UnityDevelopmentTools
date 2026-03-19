@@ -44,5 +44,18 @@ namespace DenZ.DevelopmentTools.Extensions
             foreach (var element in collection)
                 action(element);
         }
+
+        public static void ForEach<T>(this IEnumerable<T> collection, Action<int, T> action)
+        {
+            foreach (var (i, element) in collection.Zip(Enumerable.Range(0, collection.Count()), (el, i) => (i, el)))
+                action(i, element);
+        }
+
+        public static IEnumerable<T> Unfold<T>(this T[,] matrix)
+        {
+            for (int y = 0; y < matrix.GetLength(1); y++)
+                for (int x = 0; x < matrix.GetLength(0); x++)
+                    yield return matrix[x, y];
+        }
     }
 }
