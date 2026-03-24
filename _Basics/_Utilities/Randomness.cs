@@ -13,6 +13,12 @@ namespace DenZ.DevelopmentTools.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2 PointInSquare(float minXInclusive, float minYInclusive, float maxXInclusive, float maxYInclusive)
+        {
+            return new(Random.Range(minXInclusive, maxXInclusive), Random.Range(minYInclusive, maxYInclusive));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int Range(int minInclusive, int maxExclusive)
         {
             return Random.Range(minInclusive, maxExclusive);
