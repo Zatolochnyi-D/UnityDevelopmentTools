@@ -19,9 +19,11 @@ namespace DenZ.DevelopmentTools.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Range(int minInclusive, int maxExclusive)
+        public static Vector2 PointBetweenTwoRadii(float innerRadius, float outerRadius)
         {
-            return Random.Range(minInclusive, maxExclusive);
+            var alpha = Random.Range(0f, 360f);
+            var ro = Random.Range(innerRadius, outerRadius);
+            return new(ro * Mathf.Cos(alpha), ro * Mathf.Sin(alpha));
         }
     }
 }
