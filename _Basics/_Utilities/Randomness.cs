@@ -21,7 +21,7 @@ namespace DenZ.DevelopmentTools.Utilities
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector2 PointBetweenTwoRadii(float innerRadius, float outerRadius)
         {
-            var phi = Random.Range(0f, 360f);
+            var phi = Random.Range(0f, 2f * Mathf.PI);
             var ro = Random.Range(innerRadius, outerRadius);
             return new(ro * Mathf.Cos(phi), ro * Mathf.Sin(phi));
         }
