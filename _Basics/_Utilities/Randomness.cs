@@ -13,9 +13,17 @@ namespace DenZ.DevelopmentTools.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int Range(int minInclusive, int maxExclusive)
+        public static Vector2 PointInSquare(float minXInclusive, float minYInclusive, float maxXInclusive, float maxYInclusive)
         {
-            return Random.Range(minInclusive, maxExclusive);
+            return new(Random.Range(minXInclusive, maxXInclusive), Random.Range(minYInclusive, maxYInclusive));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2 PointBetweenTwoRadii(float innerRadius, float outerRadius)
+        {
+            var phi = Random.Range(0f, 2f * Mathf.PI);
+            var ro = Random.Range(innerRadius, outerRadius);
+            return new(ro * Mathf.Cos(phi), ro * Mathf.Sin(phi));
         }
     }
 }

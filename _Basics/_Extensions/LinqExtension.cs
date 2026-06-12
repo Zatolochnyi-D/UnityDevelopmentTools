@@ -39,10 +39,41 @@ namespace DenZ.DevelopmentTools.Extensions
             return minElement;
         }
 
+        public static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> collection, Func<TSource, TKey> selector) where TKey : IComparable<TKey>
+        {
+            if (collection.Count() == 0)
+                throw new InvalidOperationException("Given collection is empty.");
+            TSource maxElement = collection.First();
+            TKey maxKey = selector(maxElement);
+            foreach (var item in collection.Skip(1))
+            {
+                var newKey = selector(item);
+                if (newKey.IsGreaterThan(maxKey))
+                {
+                    maxKey = newKey;
+                    maxElement = item;
+                }
+            }
+            return maxElement;
+        }
+
         public static void ForEach<T>(this IEnumerable<T> collection, Action<T> action)
         {
             foreach (var element in collection)
                 action(element);
+        }
+
+        public static void ForEach<T>(this IEnumerable<T> collection, Action<int, T> action)
+        {
+            foreach (var (i, element) in collection.Zip(Enumerable.Range(0, collection.Count()), (el, i) => (i, el)))
+                action(i, element);
+        }
+
+        public static IEnumerable<T> Unfold<T>(this T[,] matrix)
+        {
+            for (int y = 0; y < matrix.GetLength(1); y++)
+                for (int x = 0; x < matrix.GetLength(0); x++)
+                    yield return matrix[x, y];
         }
     }
 }

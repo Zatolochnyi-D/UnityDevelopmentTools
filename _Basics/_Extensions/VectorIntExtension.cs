@@ -10,5 +10,12 @@ namespace DenZ.DevelopmentTools.Extensions
         {
             return new(vector.x, 0, vector.y);
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Deconstruct(this Vector2Int vector, out int x, out int y)
+        {
+            x = vector.x;
+            y = vector.y;
+        }
     }
 }
