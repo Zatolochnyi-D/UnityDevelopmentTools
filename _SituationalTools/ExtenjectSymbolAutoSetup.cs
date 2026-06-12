@@ -3,7 +3,6 @@ using System;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Build;
-using UnityEngine;
 
 namespace DenZ.DevelopmentTools
 {
@@ -16,7 +15,6 @@ namespace DenZ.DevelopmentTools
         static ExtenjectSymbolAutoSetup()
         {
             bool hasExtenject = NamespaceExists(NAMESPACE_NAME);
-            Debug.Log(hasExtenject);
 
             if (hasExtenject)
                 AddDefine(SYMBOL);
