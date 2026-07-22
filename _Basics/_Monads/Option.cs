@@ -7,9 +7,9 @@ namespace DenZ.DevelopmentTools.Options
         private readonly T _value;
         private readonly bool _hasValue;
 
-        internal T ValueWithoutCheck => _value;
         public bool IsSome => _hasValue;
         public bool IsNone => !_hasValue;
+        public T ValueUnsafe => _value;
         public T Value => _hasValue ? _value : throw new ArgumentException("Cannot read value of None.");
 
         public Option(T value)

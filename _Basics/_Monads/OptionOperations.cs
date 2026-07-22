@@ -26,7 +26,7 @@ namespace DenZ.DevelopmentTools.Options
         public static T ReadOrDefault<T>(this Option<T> option, T defaultValue)
         {
             if (option.IsSome)
-                return option.ValueWithoutCheck;
+                return option.ValueUnsafe;
             else
                 return defaultValue;
         }
@@ -34,7 +34,7 @@ namespace DenZ.DevelopmentTools.Options
         public static T ReadOrThrow<T>(this Option<T> option, Exception exception)
         {
             if (option.IsSome)
-                return option.ValueWithoutCheck;
+                return option.ValueUnsafe;
             else
                 throw exception;
         }
@@ -43,20 +43,20 @@ namespace DenZ.DevelopmentTools.Options
         public static void Apply<T>(this Option<T> option, Action<T> actionFunction)
         {
             if (option.IsSome)
-                actionFunction(option.ValueWithoutCheck);
+                actionFunction(option.ValueUnsafe);
         }
 
         public static Option<TOut> Map<TIn, TOut>(this Option<TIn> option, Func<TIn, TOut> mappingFunction)
         {
             if (option.IsSome)
-                return Some(mappingFunction(option.ValueWithoutCheck));
+                return Some(mappingFunction(option.ValueUnsafe));
             else
                 return None<TOut>();
         }
 
         public static Option<T> Filter<T>(this Option<T> option, Func<T, bool> predicate)
         {
-            if (option.IsSome && predicate(option.ValueWithoutCheck))
+            if (option.IsSome && predicate(option.ValueUnsafe))
                 return option;
             else
                 return None<T>();
