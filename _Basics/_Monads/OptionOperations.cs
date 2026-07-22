@@ -14,7 +14,7 @@ namespace DenZ.DevelopmentTools.Options
             return new Option<T>();
         }
 
-        public static Option<T> FromPossibleNull<T>(T value)
+        public static Option<T> FromPossibleNull<T>(T value) where T : class
         {
             if (value == null)
                 return None<T>();
@@ -26,7 +26,7 @@ namespace DenZ.DevelopmentTools.Options
         public static T ReadOrDefault<T>(this Option<T> option, T defaultValue)
         {
             if (option.IsSome)
-                return option.Value;
+                return option.ValueWithoutCheck;
             else
                 return defaultValue;
         }
@@ -34,7 +34,7 @@ namespace DenZ.DevelopmentTools.Options
         public static T ReadOrThrow<T>(this Option<T> option, Exception exception)
         {
             if (option.IsSome)
-                return option.Value;
+                return option.ValueWithoutCheck;
             else
                 throw exception;
         }
@@ -43,20 +43,20 @@ namespace DenZ.DevelopmentTools.Options
         public static void Apply<T>(this Option<T> option, Action<T> actionFunction)
         {
             if (option.IsSome)
-                actionFunction(option.Value);
+                actionFunction(option.ValueWithoutCheck);
         }
 
         public static Option<TOut> Map<TIn, TOut>(this Option<TIn> option, Func<TIn, TOut> mappingFunction)
         {
             if (option.IsSome)
-                return Some(mappingFunction(option.Value));
+                return Some(mappingFunction(option.ValueWithoutCheck));
             else
                 return None<TOut>();
         }
 
         public static Option<T> Filter<T>(this Option<T> option, Func<T, bool> predicate)
         {
-            if (option.IsSome && predicate(option.Value))
+            if (option.IsSome && predicate(option.ValueWithoutCheck))
                 return option;
             else
                 return None<T>();

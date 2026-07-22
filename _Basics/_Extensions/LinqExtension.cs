@@ -13,6 +13,7 @@ namespace DenZ.DevelopmentTools.Extensions
             return collection.ToArray();
         }
 
+
         public static bool Contains<T>(this IEnumerable<T> collection, Func<T, bool> predicate)
         {
             foreach (var item in collection)
@@ -20,6 +21,7 @@ namespace DenZ.DevelopmentTools.Extensions
                     return true;
             return false;
         }
+
 
         public static TSource MinBy<TSource, TKey>(this IEnumerable<TSource> collection, Func<TSource, TKey> selector) where TKey : IComparable<TKey>
         {
@@ -39,6 +41,7 @@ namespace DenZ.DevelopmentTools.Extensions
             return minElement;
         }
 
+
         public static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> collection, Func<TSource, TKey> selector) where TKey : IComparable<TKey>
         {
             if (collection.Count() == 0)
@@ -57,17 +60,20 @@ namespace DenZ.DevelopmentTools.Extensions
             return maxElement;
         }
 
+
         public static void ForEach<T>(this IEnumerable<T> collection, Action<T> action)
         {
             foreach (var element in collection)
                 action(element);
         }
 
+
         public static void ForEach<T>(this IEnumerable<T> collection, Action<int, T> action)
         {
             foreach (var (i, element) in collection.Zip(Enumerable.Range(0, collection.Count()), (el, i) => (i, el)))
                 action(i, element);
         }
+
 
         public static IEnumerable<T> Unfold<T>(this T[,] matrix)
         {
