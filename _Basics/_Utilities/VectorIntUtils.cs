@@ -24,5 +24,26 @@ namespace DenZ.DevelopmentTools.Utilities
             Vector2Int.down,
             Vector2Int.left
         };
+
+        // Lines that are more left than other, non-leading.
+        public static readonly IReadOnlyCollection<Vector2Int> SQUARE_HEX_GRID_NEIGHBOR_OFFSETS_LEADING = new Vector2Int[]
+        {
+            Vector2Int.up,
+            Vector2Int.right,
+            Vector2Int.down,
+            Vector2Int.down + Vector2Int.left,
+            Vector2Int.left,
+            Vector2Int.up + Vector2Int.left
+        };
+
+        public static readonly IReadOnlyCollection<Vector2Int> SQUARE_HEX_GRID_NEIGHBOR_OFFSETS_NON_LEADING = new Vector2Int[]
+        {
+            Vector2Int.up,
+            Vector2Int.up + Vector2Int.right,
+            Vector2Int.right,
+            Vector2Int.down + Vector2Int.right,
+            Vector2Int.down,
+            Vector2Int.left
+        };
     }
 }
