@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace DenZ.DevelopmentTools.Extensions
 {
     public enum InclusionType

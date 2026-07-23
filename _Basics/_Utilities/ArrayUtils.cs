@@ -19,7 +19,7 @@ namespace DenZ.DevelopmentTools.Utilities
 
         public static T[] Init<T>(int length, T value)
         {
-            return Init(length, () => value);
+            return Init(length, (_) => value);
         }
 
         public static T[,] Init<T>(int width, int height, Func<T> factory)
