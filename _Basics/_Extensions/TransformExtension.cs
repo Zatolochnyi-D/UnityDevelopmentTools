@@ -1,16 +1,19 @@
 using UnityEngine;
 
-public static class TransformExtension
+namespace DenZ.DevelopmentTools.Extensions
 {
-    public static void DestroyChildren(this Transform transform)
+    public static class TransformExtension
     {
-        while (transform.childCount != 0)
-            Object.Destroy(transform.gameObject);
-    }
+        public static void DestroyChildren(this Transform transform)
+        {
+            while (transform.childCount != 0)
+                Object.Destroy(transform.gameObject);
+        }
 
-    public static void DestroyChildrenImmediate(this Transform transform)
-    {
-        while (transform.childCount != 0)
-            Object.DestroyImmediate(transform.GetChild(0).gameObject);
+        public static void DestroyChildrenImmediate(this Transform transform)
+        {
+            while (transform.childCount != 0)
+                Object.DestroyImmediate(transform.GetChild(0).gameObject);
+        }
     }
 }
