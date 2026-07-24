@@ -54,6 +54,14 @@ namespace DenZ.DevelopmentTools.Options
                 return None<TOut>();
         }
 
+        public static Option<TOut> Bind<TIn, TOut>(this Option<TIn> option, Func<TIn, Option<TOut>> bindingFunction)
+        {
+            if (option.IsSome)
+                return bindingFunction(option.ValueUnsafe);
+            else
+                return None<TOut>();
+        }
+
         public static Option<T> Filter<T>(this Option<T> option, Func<T, bool> predicate)
         {
             if (option.IsSome && predicate(option.ValueUnsafe))

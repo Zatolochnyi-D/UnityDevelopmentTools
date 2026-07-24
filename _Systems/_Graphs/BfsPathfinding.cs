@@ -21,7 +21,6 @@ namespace DenZ.DevelopmentTools.Graphs
 
                 if (endCondition(currentKey))
                 {
-                    // we found what we were looking for. Now trace backward the path.
                     var tailKey = currentKey;
                     var path = new LinkedList<T>();
                     path.AddFirst(tailKey);
