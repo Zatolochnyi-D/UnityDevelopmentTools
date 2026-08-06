@@ -7,13 +7,13 @@ namespace DenZ.DevelopmentTools.Di
     {
         public static T GetFromContainer<T>(this GameObject gameObject)
         {
-            var container = gameObject.GetComponent<Context>().Container;
+            var container = gameObject.GetComponent<GameObjectContext>().Container;
             return container.Resolve<T>();
         }
 
         public static bool TryGetFromContainer<T>(this GameObject gameObject, out T component) where T : class
         {
-            var isContainerPresent = gameObject.TryGetComponent(out Context context);
+            var isContainerPresent = gameObject.TryGetComponent(out GameObjectContext context);
             if (isContainerPresent)
             {
                 var receivedComponent = context.Container.TryResolve<T>();
