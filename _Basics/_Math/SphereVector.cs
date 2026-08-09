@@ -4,15 +4,20 @@ namespace DenZ.DevelopmentTools.Math
 {
     public struct SphereVector
     {
+        public static SphereVector FromDegrees(float r, float degreePhi, float degreeTheta)
+        {
+            return new(r, degreePhi * Mathf.Deg2Rad, degreeTheta * Mathf.Deg2Rad);
+        }
+
         public float R; // [0, ∞)
         public float Phi; // [0, 2π)
         public float Theta; // [0, π]
 
-        public SphereVector(float r, float phi, float theta)
+        public SphereVector(float r, float radianPhi, float radianTheta)
         {
             R = r;
-            Phi = phi;
-            Theta = theta;
+            Phi = radianPhi;
+            Theta = radianTheta;
         }
 
         public readonly void Deconstruct(out float r, out float phi, out float theta)
