@@ -115,13 +115,19 @@ namespace DenZ.DevelopmentTools.Extensions
 
         #region Swizzling
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3 AsX0Z(this Vector2 vector)
+        public static Vector3 AsX0Y(this Vector2 vector)
         {
             return new(vector.x, 0f, vector.y);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3Int AsX0Z(this Vector2Int vector)
+        public static Vector3 AsY0X(this Vector2 vector)
+        {
+            return new(vector.y, 0f, vector.x);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector3Int AsX0Y(this Vector2Int vector)
         {
             return new(vector.x, 0, vector.y);
         }
