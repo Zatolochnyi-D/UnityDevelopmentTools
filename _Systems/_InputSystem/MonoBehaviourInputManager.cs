@@ -11,11 +11,11 @@ namespace DenZ.DevelopmentTools.InputSystem
     /// <typeparam name="T"></typeparam>
     public abstract class MonoBehaviourInputManager<T> : MonoBehaviour where T : IInputActionCollection2, IDisposable, new()
     {
-        protected T InputActions;
+        protected T Inputs;
 
         protected virtual void Awake()
         {
-            InputActions = new();
+            Inputs = new();
         }
     }
 }

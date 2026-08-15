@@ -10,11 +10,11 @@ namespace DenZ.DevelopmentTools.InputSystem
     /// <typeparam name="T">Unity's Input Actions, that will be wrapped by this Input Manager.</typeparam>
     public abstract class PlainInputManager<T> where T : IInputActionCollection2, IDisposable, new()
     {
-        protected T InputActions;
+        protected T Inputs;
 
         public PlainInputManager()
         {
-            InputActions = new();
+            Inputs = new();
         }
     }
 }
