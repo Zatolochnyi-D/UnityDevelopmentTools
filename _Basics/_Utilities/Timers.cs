@@ -6,6 +6,15 @@ namespace DenZ.DevelopmentTools.Utilities
 {
     public static class Timers
     {
+        public static async Awaitable InvokeEachFrameIndefinitely(Action actionToCall, CancellationToken token = default)
+        {
+            while (!token.IsCancellationRequested)
+            {
+                actionToCall.Invoke();
+                await Awaitable.NextFrameAsync(token);
+            }
+        }
+
         public static async Awaitable InvokeOnce(Action actionToCall, float seconds, CancellationToken token = default)
         {
             await Awaitable.WaitForSecondsAsync(seconds, token);
@@ -18,7 +27,7 @@ namespace DenZ.DevelopmentTools.Utilities
         {
             for (int i = 0; i < frames; i++)
             {
-                await Awaitable.NextFrameAsync(token);                
+                await Awaitable.NextFrameAsync(token);
                 if (token.IsCancellationRequested)
                     return;
             }
