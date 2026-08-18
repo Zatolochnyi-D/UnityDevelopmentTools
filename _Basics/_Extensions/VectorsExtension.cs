@@ -113,7 +113,7 @@ namespace DenZ.DevelopmentTools.Extensions
         #endregion
 
 
-        #region Swizzling
+        #region Swizzling 2D to 3D
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3 AsX0Y(this Vector2 vector)
         {
@@ -130,6 +130,14 @@ namespace DenZ.DevelopmentTools.Extensions
         public static Vector3Int AsX0Y(this Vector2Int vector)
         {
             return new(vector.x, 0, vector.y);
+        }
+        #endregion
+
+
+        #region Swizzling 3D to 2D
+        public static Vector2 AsXZ(this Vector3 vector)
+        {
+            return new(vector.x, vector.z);
         }
         #endregion
     }
