@@ -32,6 +32,12 @@ namespace DenZ.DevelopmentTools.Math
             return a + (b - a) * t;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float LerpClamped(float a, float b, float t)
+        {
+            return Lerp(a, b, Mathf.Clamp01(t));
+        }
+
 
 
         /// <summary>
@@ -43,13 +49,28 @@ namespace DenZ.DevelopmentTools.Math
             return a != b ? (c - a) / (b - a) : 0f;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float InverseLerpClamped(float a, float b, float c)
+        {
+            return Mathf.Clamp01(InverseLerp(a, b, c));
+        }
 
 
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float MapRange(float value, float fromMin = 0f, float fromMax = 1f, float toMin = 0f, float toMax = 1f)
         {
-            // TODO: Those lerp interpolations assume t in [0;1] range, what is not necessary the case. Fix.
-            return Mathf.Lerp(toMin, toMax, Mathf.InverseLerp(fromMin, fromMax, value));
+            return Lerp(toMin, toMax, InverseLerp(fromMin, fromMax, value));
         }
+
+        public static float MapRangeClamped(float value, float fromMin = 0f, float fromMax = 1f, float toMin = 0f, float toMax = 1f)
+        {
+            return Lerp(toMin, toMax, InverseLerpClamped(fromMin, fromMax, value));
+        }
+
+
+
+
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool InsideRectangle(Vector2Int point, int width, int height)
