@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace DenZ.DevelopmentTools.Utilities
+namespace DenZ.DevelopmentTools.Math
 {
-    public static class MathUtils
+    public static class Maths
     {
         public static List<int> SeparateDigits(int number)
         {
@@ -20,6 +20,30 @@ namespace DenZ.DevelopmentTools.Utilities
             leftovers.Reverse();
             return leftovers;
         }
+
+
+
+        /// <summary>
+        /// Linear interpolation with t unclamped.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float Lerp(float a, float b, float t)
+        {
+            return a + (b - a) * t;
+        }
+
+
+
+        /// <summary>
+        /// Inverse linear interpolation with t unclamped.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float InverseLerp(float a, float b, float c)
+        {
+            return a != b ? (c - a) / (b - a) : 0f;
+        }
+
+
 
         public static float MapRange(float value, float fromMin = 0f, float fromMax = 1f, float toMin = 0f, float toMax = 1f)
         {
