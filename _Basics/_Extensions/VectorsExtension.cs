@@ -139,6 +139,21 @@ namespace DenZ.DevelopmentTools.Extensions
         {
             return new(vector.x, vector.z);
         }
+
+        public static Vector2 AsXY(this Vector3 vector)
+        {
+            return new(vector.x, vector.y);
+        }
+
+        public static Vector2 AsYZ(this Vector3 vector)
+        {
+            return new(vector.y, vector.z);
+        }
+
+        public static Vector2 AsZY(this Vector3 vector)
+        {
+            return new(vector.z, vector.y);
+        }
         #endregion
     }
 }

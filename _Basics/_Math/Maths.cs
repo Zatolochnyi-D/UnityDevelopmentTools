@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DenZ.DevelopmentTools.Math
 {
-    public static class Maths
+    public static class MathS
     {
         public static List<int> SeparateDigits(int number)
         {
@@ -67,8 +67,6 @@ namespace DenZ.DevelopmentTools.Math
         {
             return Lerp(toMin, toMax, InverseLerpClamped(fromMin, fromMax, value));
         }
-
-
 
 
 
