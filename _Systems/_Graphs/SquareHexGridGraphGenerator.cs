@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using DenZ.DevelopmentTools.Extensions;
+using DenZ.DevelopmentTools.Math;
 using DenZ.DevelopmentTools.Utilities;
 using UnityEngine;
 
@@ -21,7 +21,7 @@ namespace DenZ.DevelopmentTools.Graphs
 
         public IEnumerable<Vector2Int> GetNeighbors(Vector2Int tileId)
         {
-            if (tileId.x.IsOutsideRange((0, _gridSize.x)) || tileId.y.IsOutsideRange((0, _gridSize.y)))
+            if (!tileId.x.IsInside(0, _gridSize.x) || !tileId.y.IsInside(0, _gridSize.y))
                 throw new ArgumentException("Provided tile id is outside of the grid.");
 
             var isRowLeading = tileId.y % 2 == _leadingRowMarker;
@@ -31,7 +31,7 @@ namespace DenZ.DevelopmentTools.Graphs
             foreach (var neighborOffset in properOffset)
             {
                 var possibleNeighbor = tileId + neighborOffset;
-                if (possibleNeighbor.x.IsInsideRange((0, _gridSize.x)) && possibleNeighbor.y.IsInsideRange((0, _gridSize.y)))
+                if (possibleNeighbor.x.IsInside((0, _gridSize.x)) && possibleNeighbor.y.IsInside((0, _gridSize.y)))
                     neighbors.Add(possibleNeighbor);
             }
             return neighbors;
