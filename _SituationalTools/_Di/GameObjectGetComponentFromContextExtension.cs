@@ -13,11 +13,8 @@ namespace DenZ.DevelopmentTools.Di
 
         public static T GetFromContainer<T>(this GameObject gameObject) => GetContextOrThrow(gameObject).Container.Resolve<T>();
 
-        public static Option<T> TryGetFromContainer<T>(this GameObject gameObject) where T : class
-        {
-            var container = GetContextOrThrow(gameObject).Container;
-            var component = container.TryResolve<T>();
-            return Option.FromPossibleNull(component);
-        }
+        public static Option<T> TryGetFromContainer<T>(this GameObject gameObject) where T : class => Option.FromPossibleNull(GetContextOrThrow(gameObject).Container.TryResolve<T>());
+
+        public static Option<T> TryGetFromPossibleContainerless<T>(this GameObject gameObject) where T : class => Option.FromPossibleNull(gameObject.GetComponent<GameObjectContext>()).Bind(x => Option.FromPossibleNull(x.Container.TryResolve<T>()));
     }
 }
