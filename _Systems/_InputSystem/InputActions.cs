@@ -2,9 +2,8 @@ using System;
 
 namespace DenZ.DevelopmentTools.InputSystem
 {
-    public interface IAction
+    public interface IStartCancelAction
     {
-        public event Action OnInitiated;
         public event Action OnStarted;
         public event Action OnCanceled;
     }
