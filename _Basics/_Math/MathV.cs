@@ -1,24 +1,28 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace DenZ.DevelopmentTools.Math
 {
     public static class MathV
     {
-        // TODO: This doesn't include check for c being on the same line with a and b.
-        public static float InverseLerp(Vector3 a, Vector3 b, Vector3 c)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool InsideRectangle(Vector2Int point, int width, int height)
         {
-            var top = c - a;
-            var bottom = b - a;
+            if (point.x < 0 || point.x >= width)
+                return false;
+            if (point.y < 0 || point.y >= height)
+                return false;
+            return true;
+        }
 
-            var ts = new Vector3(
-                top.x != bottom.x ? top.x / bottom.x : 0f,
-                top.y != bottom.y ? top.y / bottom.y : 0f,
-                top.z != bottom.z ? top.z / bottom.z : 0f
-            );
-
-            var t = Mathf.Max(ts.x, ts.y, ts.z);
-
-            return t;
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool InsideRectangle(Vector2 point, float width, float height)
+        {
+            if (point.x < 0f || point.x > width)
+                return false;
+            if (point.y < 0f || point.y > height)
+                return false;
+            return true;
         }
     }
 }
