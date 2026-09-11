@@ -16,5 +16,20 @@ namespace DenZ.DevelopmentTools.Di
         public static Option<T> TryGetFromContainer<T>(this GameObject gameObject) where T : class => Option.FromPossibleNull(GetContextOrThrow(gameObject).Container.TryResolve<T>());
 
         public static Option<T> TryGetFromPossibleContainerless<T>(this GameObject gameObject) where T : class => Option.FromPossibleNull(gameObject.GetComponent<GameObjectContext>()).Bind(x => Option.FromPossibleNull(x.Container.TryResolve<T>()));
+
+        public static Option<T> FindFromContainerOnObjectOrItsParents<T>(this GameObject gameObject) where T : class
+        {
+            var currentObject = gameObject;
+            while (currentObject != null)
+            {
+                var component = currentObject.TryGetFromPossibleContainerless<T>();
+                if (component.IsSome)
+                    return component.ValueUnsafe;
+                else
+                    currentObject = currentObject.transform.parent != null ? currentObject.transform.parent.gameObject : null;
+            }
+            return Option.None<T>();
+        }
+
     }
 }
