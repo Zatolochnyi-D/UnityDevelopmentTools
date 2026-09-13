@@ -73,6 +73,17 @@ namespace DenZ.DevelopmentTools.Extensions
             vector.y = y.ReadOrDefault(vector.y);
             return vector;
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector4 With(this Vector4 vector, Option<float> x = default, Option<float> y = default, Option<float> z = default, Option<float> w = default)
+        {
+            return new(
+                x.ReadOrDefault(vector.x),
+                y.ReadOrDefault(vector.y),
+                z.ReadOrDefault(vector.z),
+                w.ReadOrDefault(vector.w)
+            );
+        }
         #endregion
 
 
