@@ -8,10 +8,7 @@ namespace DenZ.DevelopmentTools.Extensions
     public static class LinqExtension
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IEnumerable<T> Clone<T>(this IEnumerable<T> collection)
-        {
-            return collection.ToArray();
-        }
+        public static IEnumerable<T> Clone<T>(this IEnumerable<T> collection) => collection.ToArray();
 
 
         public static bool Contains<T>(this IEnumerable<T> collection, Func<T, bool> predicate)
@@ -20,44 +17,6 @@ namespace DenZ.DevelopmentTools.Extensions
                 if (predicate(item))
                     return true;
             return false;
-        }
-
-
-        public static TSource MinBy<TSource, TKey>(this IEnumerable<TSource> collection, Func<TSource, TKey> selector) where TKey : IComparable<TKey>
-        {
-            if (collection.Count() == 0)
-                throw new InvalidOperationException("Given collection is empty.");
-            TSource minElement = collection.First();
-            TKey minKey = selector(minElement);
-            foreach (var item in collection.Skip(1))
-            {
-                var newKey = selector(item);
-                if (newKey.IsLowerThan(minKey))
-                {
-                    minKey = newKey;
-                    minElement = item;
-                }
-            }
-            return minElement;
-        }
-
-
-        public static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> collection, Func<TSource, TKey> selector) where TKey : IComparable<TKey>
-        {
-            if (collection.Count() == 0)
-                throw new InvalidOperationException("Given collection is empty.");
-            TSource maxElement = collection.First();
-            TKey maxKey = selector(maxElement);
-            foreach (var item in collection.Skip(1))
-            {
-                var newKey = selector(item);
-                if (newKey.IsGreaterThan(maxKey))
-                {
-                    maxKey = newKey;
-                    maxElement = item;
-                }
-            }
-            return maxElement;
         }
 
 
