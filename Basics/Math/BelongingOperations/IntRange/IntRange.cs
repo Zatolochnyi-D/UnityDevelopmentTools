@@ -1,3 +1,5 @@
+using DenZ.DevelopmentTools.Utilities;
+
 namespace DenZ.DevelopmentTools.Math
 {
     public struct IntRange

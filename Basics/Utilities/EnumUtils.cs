@@ -8,9 +8,6 @@ namespace DenZ.DevelopmentTools.Utilities
     public static class EnumUtils
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static IEnumerable<T> GetValues<T>() where T : Enum
-        {
-            return Enum.GetValues(typeof(T)).Cast<T>();
-        }
+        public static IEnumerable<T> GetValues<T>() where T : Enum => Enum.GetValues(typeof(T)).Cast<T>();
     }
 }

@@ -1,13 +1,9 @@
 using System;
-using UnityEngine;
 
-namespace DenZ.DevelopmentTools
+namespace DenZ.DevelopmentTools.Utilities
 {
     public static class FastExeptions
     {
-        public static Exception NonExistentEnumValue<T>() where T : Enum
-        {
-            return new Exception($"Non-existent value of {typeof(T)} enum was given.");
-        }
+        public static Exception NonExistentEnumValue<T>() where T : Enum => new($"Non-existent value of {typeof(T)} enum was given.");
     }
 }
