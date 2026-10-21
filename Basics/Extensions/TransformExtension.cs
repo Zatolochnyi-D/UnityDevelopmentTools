@@ -6,8 +6,8 @@ namespace DenZ.DevelopmentTools.Extensions
     {
         public static void DestroyChildren(this Transform transform)
         {
-            while (transform.childCount != 0)
-                Object.Destroy(transform.gameObject);
+            foreach (Transform child in transform)
+                Object.Destroy(child.gameObject);
         }
 
         public static void DestroyChildrenImmediate(this Transform transform)
