@@ -6,15 +6,9 @@ namespace DenZ.DevelopmentTools.Extensions
     public static class GridExtension
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector2Int LocalToCell2d(this Grid grid, Vector3 localPosition)
-        {
-            return (Vector2Int)grid.LocalToCell(localPosition);
-        }
+        public static Vector2Int LocalToCell2d(this Grid grid, Vector3 localPosition) => grid.LocalToCell(localPosition).AsXY();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static Vector3 GetCell2dCenterLocal(this Grid grid, Vector2Int cell2d)
-        {
-            return grid.GetCellCenterLocal((Vector3Int)cell2d);
-        }
+        public static Vector3 GetCell2dCenterLocal(this Grid grid, Vector2Int cell2d) => grid.GetCellCenterLocal((Vector3Int)cell2d);
     }
 }
