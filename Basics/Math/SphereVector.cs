@@ -84,9 +84,9 @@ namespace DenZ.DevelopmentTools.Math
         public static SphereVector With(this SphereVector vector, Option<float> r = default, Option<float> phi = default, Option<float> theta = default)
         {
             return new SphereVector(
-                r.ReadOrDefault(vector.R),
-                phi.ReadOrDefault(vector.Phi),
-                theta.ReadOrDefault(vector.Theta)
+                r.ReadOrDefaultTo(vector.R),
+                phi.ReadOrDefaultTo(vector.Phi),
+                theta.ReadOrDefaultTo(vector.Theta)
             );
         }
     }

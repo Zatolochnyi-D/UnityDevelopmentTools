@@ -24,7 +24,7 @@ namespace DenZ.DevelopmentTools.Options
 
 
 
-        public static T ReadOrDefault<T>(this Option<T> option, T defaultValue)
+        public static T ReadOrDefaultTo<T>(this Option<T> option, T defaultValue)
         {
             if (option.IsSome)
                 return option.ValueUnsafe;

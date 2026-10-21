@@ -39,7 +39,7 @@ namespace DenZ.DevelopmentTools.Graphs
 
                 foreach (var neighborKey in graph.GetNeighbors(currentKey))
                 {
-                    if (exclusionFunction.Map(x => x(neighborKey)).ReadOrDefault(false))
+                    if (exclusionFunction.Map(x => x(neighborKey)).ReadOrDefaultTo(false))
                         continue;
                     
                     if (!visitedFromMap.ContainsKey(neighborKey))
