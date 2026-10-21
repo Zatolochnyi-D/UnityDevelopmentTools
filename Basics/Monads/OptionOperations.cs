@@ -40,6 +40,14 @@ namespace DenZ.DevelopmentTools.Options
                 throw exception;
         }
 
+        public static T ReadOrNew<T>(this Option<T> option) where T : new()
+        {
+            if (option.IsSome)
+                return option.ValueUnsafe;
+            else
+                return new();
+        }
+
 
 
         public static void Apply<T>(this Option<T> option, Action<T> applicationFunction)
