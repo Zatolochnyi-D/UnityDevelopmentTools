@@ -10,22 +10,22 @@ namespace DenZ.DevelopmentTools.Extensions
     {
         public static T PeekItem<T>(this IEnumerable<T> collection, Option<Randomizer> randomizer = default)
         {
-            var r = randomizer.ReadOrNew();
-            int index = r.Range(0, collection.Count());
-            return collection.Skip(index).First();
+            var index = randomizer.ReadOrNew().Range(0, collection.Count());
+            return collection.ElementAt(index);
         }
 
-        public static T PeekItem<T>(this List<T> collection)
+
+
+        public static T PeekItem<T>(this IList<T> collection, Option<Randomizer> randomizer = default)
         {
-            int index = UnityEngine.Random.Range(0, collection.Count);
-            T item = collection[index];
-            return item;
+            var index = randomizer.ReadOrNew().Range(0, collection.Count);
+            return collection[index];
         }
 
-        public static T PickItem<T>(this List<T> collection)
+        public static T PickItem<T>(this IList<T> collection, Option<Randomizer> randomizer = default)
         {
-            int index = UnityEngine.Random.Range(0, collection.Count);
-            T item = collection[index];
+            var index = randomizer.ReadOrNew().Range(0, collection.Count);
+            var item = collection[index];
             collection.RemoveAt(index);
             return item;
         }
