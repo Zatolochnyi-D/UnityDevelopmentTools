@@ -6,7 +6,7 @@ namespace DenZ.DevelopmentTools.Utilities
 {
     public static class Timers
     {
-        public static async Awaitable InvokeEachFrameIndefinitely(Action actionToCall, CancellationToken token = default, bool callOnStart = false)
+        public static async void InvokeEachFrameIndefinitely(Action actionToCall, CancellationToken token = default, bool callOnStart = false)
         {
             if (callOnStart)
                 actionToCall.Invoke();
@@ -17,7 +17,7 @@ namespace DenZ.DevelopmentTools.Utilities
             }
         }
 
-        public static async Awaitable InvokeOnce(Action actionToCall, float seconds, CancellationToken token = default)
+        public static async void InvokeOnce(Action actionToCall, float seconds, CancellationToken token = default)
         {
             await Awaitable.WaitForSecondsAsync(seconds, token);
             if (token.IsCancellationRequested)
@@ -25,7 +25,7 @@ namespace DenZ.DevelopmentTools.Utilities
             actionToCall.Invoke();
         }
 
-        public static async Awaitable InvokeOnce(Action actionToCall, int frames, CancellationToken token = default)
+        public static async void InvokeOnce(Action actionToCall, int frames, CancellationToken token = default)
         {
             for (int i = 0; i < frames; i++)
                 await Awaitable.NextFrameAsync(token);
@@ -34,7 +34,7 @@ namespace DenZ.DevelopmentTools.Utilities
             actionToCall.Invoke();
         }
 
-        public static async Awaitable InvokeIndefinitely(Action actionToCall, float seconds, CancellationToken token = default, bool callOnStart = false)
+        public static async void InvokeIndefinitely(Action actionToCall, float seconds, CancellationToken token = default, bool callOnStart = false)
         {
             if (callOnStart)
                 actionToCall.Invoke();
