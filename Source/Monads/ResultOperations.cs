@@ -7,21 +7,13 @@ namespace DenZ.DevelopmentTools.Monads
         #region Create
         public static Result<T> Ok<T>(T value) => new(value);
 
-        public static Result<T> Error<T>(string error) => new(error);
+        public static Result<T> Error<T>(Func<Exception> error) => new(error);
 
-        public static Result<T> FromOption<T>(Option<T> option, string onNone) => option.IsSome ? Ok(option.ValueUnsafe) : Error<T>(onNone);
+        public static Result<T> ToResult<T>(this Option<T> option, Func<Exception> onNone) => option.IsSome ? Ok(option.ValueUnsafe) : Error<T>(onNone);
         #endregion
 
 
         #region Read
-        public static void ThrowIfError<T>(this Result<T> result, Func<string, Exception> exceptionFactory)
-        {
-            if (result.IsError)
-                throw exceptionFactory(result.ErrorUnsafe);
-        }
-
-        public static Result<T> ThrowIfErrorOrElse<T>(this Result<T> result, Func<string, Exception> exceptionFactory) => result.IsError ? throw exceptionFactory(result.ErrorUnsafe) : result;
-
         // public static T ReadOrDefaultTo<T>(this Option<T> option, T defaultValue) => option.IsSome ? option.ValueUnsafe : defaultValue;
 
         // public static T ReadOrThrow<T>(this Option<T> option, Exception exception) => option.IsSome ? option.ValueUnsafe : throw exception;
@@ -38,7 +30,7 @@ namespace DenZ.DevelopmentTools.Monads
         }
 
         // Check Ok for condition and return it if pass, else return new error. If error - jut propagate.
-        public static Result<T> Check<T>(this Result<T> result, Func<T, bool> checkFunction, string onCheckFailed) => result.IsOk ? (checkFunction(result.OkUnsafe) ? result : onCheckFailed) : result;
+        public static Result<T> Check<T>(this Result<T> result, Func<T, bool> checkFunction, Func<Exception> onCheckFailed) => result.IsOk ? (checkFunction(result.OkUnsafe) ? result : onCheckFailed) : result;
 
         // public static Option<TOut> Map<TIn, TOut>(this Option<TIn> option, Func<TIn, TOut> mappingFunction) => option.IsSome ? Some(mappingFunction(option.ValueUnsafe)) : None<TOut>();
 

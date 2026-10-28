@@ -18,6 +18,8 @@ namespace DenZ.DevelopmentTools.Monads
 
         public static T ReadOrThrow<T>(this Option<T> option, Exception exception) => option.IsSome ? option.ValueUnsafe : throw exception;
 
+        public static T ReadOrThrow<T>(this Option<T> option, Func<Exception> exceptionFactory) => option.IsSome ? option.ValueUnsafe : throw exceptionFactory();
+
         public static T ReadOrNew<T>(this Option<T> option) where T : new() => option.IsSome ? option.ValueUnsafe : new();
         #endregion
 
@@ -34,6 +36,8 @@ namespace DenZ.DevelopmentTools.Monads
         public static Option<TOut> Bind<TIn, TOut>(this Option<TIn> option, Func<TIn, Option<TOut>> bindingFunction) => option.IsSome ? bindingFunction(option.ValueUnsafe) : None<TOut>();
 
         public static Option<T> Replace<T>(this Option<T> option, Func<T> replacingFunction) => option.IsNone ? Some(replacingFunction()) : option;
+
+        public static Option<T> BindReplace<T>(this Option<T> option, Func<Option<T>> replacingFunction) => option.IsNone ? replacingFunction() : option;
 
         public static Option<T> Filter<T>(this Option<T> option, Func<T, bool> predicate) => option.IsSome && predicate(option.ValueUnsafe) ? option : None<T>();
 
