@@ -25,10 +25,18 @@ namespace DenZ.DevelopmentTools.Monads
 
 
         #region Transform/Update
-        public static void Apply<T>(this Option<T> option, Action<T> applicationFunction)
+        public static Option<T> Evaluate<T>(this Option<T> option, Action<T> applicationFunction)
         {
             if (option.IsSome)
                 applicationFunction(option.ValueUnsafe);
+            return option;
+        }
+
+        public static Option<T> OrElse<T>(this Option<T> option, Action applicationFunction)
+        {
+            if (option.IsNone)
+                applicationFunction();
+            return option;
         }
 
         public static Option<TOut> Map<TIn, TOut>(this Option<TIn> option, Func<TIn, TOut> mappingFunction) => option.IsSome ? Some(mappingFunction(option.ValueUnsafe)) : None<TOut>();
