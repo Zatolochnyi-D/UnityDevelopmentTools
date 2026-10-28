@@ -13,16 +13,18 @@ namespace DenZ.DevelopmentTools.Graphs
         public SquareHexGridGraphGenerator(Vector2Int gridSize)
         {
             if (_gridSize.x < 0 || _gridSize.y < 0)
-                throw new ArgumentException("One of size dimensions is less than 0.", nameof(gridSize));
+                throw new ArgumentException("One of size dimensions is less than 0.");
             _gridSize = gridSize;
         }
 
         public IEnumerable<Vector2Int> GetNeighbors(Vector2Int tileId)
         {
             if (!tileId.x.IsInside(0, _gridSize.x) || !tileId.y.IsInside(0, _gridSize.y))
-                throw new ArgumentException("Provided tile id is outside of the grid.", nameof(tileId));
+                throw new ArgumentException("Provided tile id is outside of the grid.");
 
-            foreach (var neighborOffset in VectorIntUtils.SQUARE_HEX_GRID_NEIGHBOR_OFFSETS)
+            var properOffset = tileId.y % 2 == 0 ? VectorIntUtils.SQUARE_HEX_GRID_NEIGHBOR_OFFSETS_LEADING : VectorIntUtils.SQUARE_HEX_GRID_NEIGHBOR_OFFSETS_NON_LEADING;
+
+            foreach (var neighborOffset in properOffset)
             {
                 var possibleNeighbor = tileId + neighborOffset;
                 if (RangeUtils.IsInside(possibleNeighbor, Vector2Int.zero, _gridSize))
