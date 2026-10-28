@@ -1,3 +1,5 @@
+using System;
+
 namespace DenZ.DevelopmentTools.Monads
 {
     public static class Result
@@ -12,6 +14,14 @@ namespace DenZ.DevelopmentTools.Monads
 
 
         #region Read
+        public static void ThrowIfError<T>(this Result<T> result, Func<string, Exception> exceptionFactory)
+        {
+            if (result.IsError)
+                throw exceptionFactory(result.ErrorUnsafe);
+        }
+
+        public static Result<T> ThrowIfErrorOrElse<T>(this Result<T> result, Func<string, Exception> exceptionFactory) => result.IsError ? throw exceptionFactory(result.ErrorUnsafe) : result;
+
         // public static T ReadOrDefaultTo<T>(this Option<T> option, T defaultValue) => option.IsSome ? option.ValueUnsafe : defaultValue;
 
         // public static T ReadOrThrow<T>(this Option<T> option, Exception exception) => option.IsSome ? option.ValueUnsafe : throw exception;
@@ -21,11 +31,14 @@ namespace DenZ.DevelopmentTools.Monads
 
 
         #region Transform/Update
-        // public static void Apply<T>(this Option<T> option, Action<T> applicationFunction)
-        // {
-        //     if (option.IsSome)
-        //         applicationFunction(option.ValueUnsafe);
-        // }
+        public static void Apply<T>(this Result<T> result, Action<T> applicationFunction)
+        {
+            if (result.IsOk)
+                applicationFunction(result.OkUnsafe);
+        }
+
+        // Check Ok for condition and return it if pass, else return new error. If error - jut propagate.
+        public static Result<T> Check<T>(this Result<T> result, Func<T, bool> checkFunction, string onCheckFailed) => result.IsOk ? (checkFunction(result.OkUnsafe) ? result : onCheckFailed) : result;
 
         // public static Option<TOut> Map<TIn, TOut>(this Option<TIn> option, Func<TIn, TOut> mappingFunction) => option.IsSome ? Some(mappingFunction(option.ValueUnsafe)) : None<TOut>();
 
