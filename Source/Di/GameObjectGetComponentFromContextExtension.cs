@@ -34,8 +34,7 @@ namespace DenZ.DevelopmentTools.Di
         public static Option<T> TryGetFromObjectOrContainer<T>(this GameObject gameObject) where T : class
         {
             return gameObject.TryGetComponent<T>()
-                             .BindReplace(() => gameObject.TryGetFromPossibleContainerless<T>())
-                             .ReadOrThrow(new InvalidOperationException("Game object doesn't have searched component neither on itself nor in container."));
+                             .BindReplace(() => gameObject.TryGetFromPossibleContainerless<T>());
         }
     }
 }
