@@ -1,6 +1,6 @@
 using System;
 
-namespace DenZ.DevelopmentTools.Options
+namespace DenZ.DevelopmentTools.Monads
 {
     public readonly struct Option<T>
     {

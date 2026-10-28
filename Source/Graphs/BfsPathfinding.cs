@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DenZ.DevelopmentTools.Options;
+using DenZ.DevelopmentTools.Monads;
 
 namespace DenZ.DevelopmentTools.Graphs
 {

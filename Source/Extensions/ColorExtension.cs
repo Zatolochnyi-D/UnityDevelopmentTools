@@ -1,5 +1,5 @@
 using System.Runtime.CompilerServices;
-using DenZ.DevelopmentTools.Options;
+using DenZ.DevelopmentTools.Monads;
 using UnityEngine;
 
 namespace DenZ.DevelopmentTools.Extensions
