@@ -25,7 +25,7 @@ namespace DenZ.DevelopmentTools.Graphs
             foreach (var neighborOffset in VectorIntUtils.SQUARE_HEX_GRID_NEIGHBOR_OFFSETS)
             {
                 var possibleNeighbor = tileId + neighborOffset;
-                if (possibleNeighbor.x.IsInside((0, _gridSize.x)) && possibleNeighbor.y.IsInside((0, _gridSize.y)))
+                if (RangeUtils.IsInside(possibleNeighbor, Vector2Int.zero, _gridSize))
                     yield return possibleNeighbor;
             }
         }
