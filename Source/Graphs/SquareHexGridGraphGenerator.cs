@@ -9,32 +9,25 @@ namespace DenZ.DevelopmentTools.Graphs
     public class SquareHexGridGraphGenerator : IGraph<Vector2Int>
     {
         private readonly Vector2Int _gridSize;
-        private readonly int _leadingRowMarker; // odd/even used as marker.
 
-        public SquareHexGridGraphGenerator(Vector2Int gridSize, bool isFirstLeading)
+        public SquareHexGridGraphGenerator(Vector2Int gridSize)
         {
             if (_gridSize.x < 0 || _gridSize.y < 0)
-                throw new ArgumentException("One of size dimensions is less than 0.");
+                throw new ArgumentException("One of size dimensions is less than 0.", nameof(gridSize));
             _gridSize = gridSize;
-            _leadingRowMarker = isFirstLeading ? 0 : 1; // if first leading, then even rows are leading, otherwise odd rows are leading.
         }
 
         public IEnumerable<Vector2Int> GetNeighbors(Vector2Int tileId)
         {
             if (!tileId.x.IsInside(0, _gridSize.x) || !tileId.y.IsInside(0, _gridSize.y))
-                throw new ArgumentException("Provided tile id is outside of the grid.");
+                throw new ArgumentException("Provided tile id is outside of the grid.", nameof(tileId));
 
-            var isRowLeading = tileId.y % 2 == _leadingRowMarker;
-            var properOffset = isRowLeading ? VectorIntUtils.SQUARE_HEX_GRID_NEIGHBOR_OFFSETS_LEADING : VectorIntUtils.SQUARE_HEX_GRID_NEIGHBOR_OFFSETS_NON_LEADING;
-
-            var neighbors = new List<Vector2Int>();
-            foreach (var neighborOffset in properOffset)
+            foreach (var neighborOffset in VectorIntUtils.SQUARE_HEX_GRID_NEIGHBOR_OFFSETS)
             {
                 var possibleNeighbor = tileId + neighborOffset;
                 if (possibleNeighbor.x.IsInside((0, _gridSize.x)) && possibleNeighbor.y.IsInside((0, _gridSize.y)))
-                    neighbors.Add(possibleNeighbor);
+                    yield return possibleNeighbor;
             }
-            return neighbors;
         }
     }
 }
