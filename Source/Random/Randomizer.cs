@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace DenZ.DevelopmentTools.Random
 {
@@ -19,5 +20,15 @@ namespace DenZ.DevelopmentTools.Random
         }
 
         public int Range(int minInclusive, int maxExclusive) => _random.Next(minInclusive, maxExclusive);
+
+        public Vector2Int Range(Vector2Int minInclusive, Vector2Int maxExclusive)
+        {
+            return new(
+                _random.Next(minInclusive.x, maxExclusive.x),
+                _random.Next(minInclusive.y, maxExclusive.y)
+            );
+        }
+
+        public Vector2Int Range(Vector2Int maxExclusive) => Range(Vector2Int.zero, maxExclusive);
     }
 }
