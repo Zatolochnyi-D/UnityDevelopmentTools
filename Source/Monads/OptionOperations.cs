@@ -47,7 +47,7 @@ namespace DenZ.DevelopmentTools.Monads
 
         public static Option<T> BindReplace<T>(this Option<T> option, Func<Option<T>> replacingFunction) => option.IsNone ? replacingFunction() : option;
 
-        public static Option<T> Filter<T>(this Option<T> option, Func<T, bool> predicate) => option.IsSome && predicate(option.ValueUnsafe) ? option : None<T>();
+        public static Option<T> Filter<T>(this Option<T> option, Predicate<T> predicate) => option.IsSome && predicate(option.ValueUnsafe) ? option : None<T>();
 
         public static int Count<T>(this Option<T> option) => option.IsSome ? 1 : 0;
         #endregion
