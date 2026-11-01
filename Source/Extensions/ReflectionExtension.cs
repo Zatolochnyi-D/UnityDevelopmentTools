@@ -19,5 +19,10 @@ namespace DenZ.DevelopmentTools.Extensions
         public static bool IsAssignableTo(this Type type, Type otherType) => otherType.IsAssignableFrom(type);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsAssignableTo<T>(this Type type) => type.IsAssignableTo(typeof(T));
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsAssignableBy(this Type type, Type otherType) => type.IsAssignableFrom(otherType);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsAssignableBy<T>(this Type type) => type.IsAssignableFrom(typeof(T));
     }
 }
