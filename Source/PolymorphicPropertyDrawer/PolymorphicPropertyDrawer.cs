@@ -8,7 +8,7 @@ using UnityEngine;
 namespace DenZ.DevelopmentTools.PolymorphicPropertyDrawing
 {
     [CustomPropertyDrawer(typeof(PolymorphicAttribute))]
-    public class PlymorphicPropertyDrawer : PropertyDrawer
+    public class PolymorphicPropertyDrawer : PropertyDrawer
     {
         private Dictionary<string, Type> _typeMap;
 
