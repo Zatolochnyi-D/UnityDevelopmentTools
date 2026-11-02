@@ -33,11 +33,23 @@ namespace DenZ.DevelopmentTools.PolymorphicPropertyDrawing
                                               .Where(type => !type.IsAbstract && type.IsAssignableTo(targetType))
                                               .ToDictionary(type => ObjectNames.NicifyVariableName(type.Name), type => type);
         }
+        
+        private void FlushMissingTypes(SerializedProperty property)
+        {
+            var targetObject = property.serializedObject.targetObject;
+            if (SerializationUtility.HasManagedReferencesWithMissingTypes(targetObject))
+            {
+                SerializationUtility.ClearAllManagedReferencesWithMissingTypes(targetObject);
+                Debug.LogWarning($"Removed missing managed references from {targetObject.name}");
+            }
+        }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label) => EditorGUI.GetPropertyHeight(property, label, true) + EditorGUIUtility.singleLineHeight;
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
+            FlushMissingTypes(property);
+
             if (_typeMap == null)
                 BuildTypeMap();
 
