@@ -39,6 +39,13 @@ namespace DenZ.DevelopmentTools.Monads
             return option;
         }
 
+        public static Option<T> OrElseThrow<T>(this Option<T> option, Func<Exception> exceptionFactory)
+        {
+            if (option.IsNone)
+                throw exceptionFactory();
+            return option;
+        }
+
         public static Option<TOut> Map<TIn, TOut>(this Option<TIn> option, Func<TIn, TOut> mappingFunction) => option.IsSome ? Some(mappingFunction(option.ValueUnsafe)) : None<TOut>();
 
         public static Option<TOut> Bind<TIn, TOut>(this Option<TIn> option, Func<TIn, Option<TOut>> bindingFunction) => option.IsSome ? bindingFunction(option.ValueUnsafe) : None<TOut>();
