@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using DenZ.DevelopmentTools.Extensions;
 using UnityEngine;
 
@@ -38,6 +39,9 @@ namespace DenZ.DevelopmentTools.Utilities
             };
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsInside(int value, int max, Inclusion1D inclusion = Inclusion1D.Left) => IsInside(value, 0, max, inclusion);
+
         public static bool IsInside(Vector2Int point, Vector2Int lowerPoint, Vector2Int upperPoint, Inclusion2D inclusion = Inclusion2D.Left | Inclusion2D.Bottom)
         {
             var (x, y) = point;
@@ -64,5 +68,8 @@ namespace DenZ.DevelopmentTools.Utilities
 
             return IsInside(x, ax, bx, inclusionX) && IsInside(y, ay, by, inclusionY);
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsInside(Vector2Int point, Vector2Int upperPoint, Inclusion2D inclusion = Inclusion2D.Left | Inclusion2D.Bottom) => IsInside(point, Vector2Int.zero, upperPoint, inclusion);
     }
 }
