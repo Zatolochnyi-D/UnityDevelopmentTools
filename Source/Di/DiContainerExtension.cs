@@ -6,6 +6,12 @@ namespace DenZ.DevelopmentTools.Di
 {
     public static class DiContainerExtension
     {
+        public static ConcreteIdBinderGeneric<T> BindPlainInitializable<T>(this DiContainer container) where T : IInitializable
+        {
+            container.Bind<IInitializable>().To<T>().FromResolve();
+            return container.Bind<T>();
+        }
+
         public static void BindMonoBehaviourService<T>(this DiContainer container) where T : Component
         {
             container.Bind<T>()
