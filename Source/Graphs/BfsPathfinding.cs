@@ -11,7 +11,7 @@ namespace DenZ.DevelopmentTools.Graphs
                                            T start,
                                            Func<T, bool> endValidationFunction,
                                            Func<Path<T>, bool> outputFunction,
-                                           Option<Func<T, bool>> exclusionFunction = default)
+                                           Option<Predicate<T>> nodeFilter = default)
         {
             var keysToVisit = new Queue<T>();
             var visitedFromMap = new Dictionary<T, Option<T>>();
@@ -42,7 +42,7 @@ namespace DenZ.DevelopmentTools.Graphs
 
                 foreach (var neighborKey in graph.GetNeighbors(currentKey))
                 {
-                    if (exclusionFunction.Map(x => x(neighborKey)).ReadOrDefaultTo(false))
+                    if (!nodeFilter.Map(x => x(neighborKey)).ReadOrDefaultTo(true))
                         continue;
 
                     if (!visitedFromMap.ContainsKey(neighborKey))
@@ -57,40 +57,40 @@ namespace DenZ.DevelopmentTools.Graphs
         public static Option<Path<T>> ShortestPath<T>(IGraph<T> graph,
                                                              T start,
                                                              T end,
-                                                             Option<Func<T, bool>> exclusionFunction = default)
+                                                             Option<Predicate<T>> nodeFilter = default)
         {
             var result = Option.None<Path<T>>();
-            ShortestPath(graph, start, key => end.Equals(key), output => { result = Option.Some(output); return false; }, exclusionFunction);
+            ShortestPath(graph, start, key => end.Equals(key), output => { result = Option.Some(output); return false; }, nodeFilter);
             return result;
         }
 
         public static Option<Path<T>> ShortestPath<T>(IGraph<T> graph,
                                                              T start,
                                                              Func<T, bool> endCondition,
-                                                             Option<Func<T, bool>> exclusionFunction = default)
+                                                             Option<Predicate<T>> nodeFilter = default)
         {
             var result = Option.None<Path<T>>();
-            ShortestPath(graph, start, endCondition, output => { result = Option.Some(output); return false; }, exclusionFunction);
+            ShortestPath(graph, start, endCondition, output => { result = Option.Some(output); return false; }, nodeFilter);
             return result;
         }
 
         public static IEnumerable<Path<T>> ShortestPaths<T>(IGraph<T> graph,
                                                                    T start,
                                                                    IEnumerable<T> ends,
-                                                                   Option<Func<T, bool>> exclusionFunction = default)
+                                                                   Option<Predicate<T>> nodeFilter = default)
         {
             List<Path<T>> result = new();
-            ShortestPath(graph, start, ends.Contains, output => { result.Add(output); return true; }, exclusionFunction);
+            ShortestPath(graph, start, ends.Contains, output => { result.Add(output); return true; }, nodeFilter);
             return result;
         }
 
         public static IEnumerable<Path<T>> ShortestPaths<T>(IGraph<T> graph,
                                                                    T start,
                                                                    Func<T, bool> endCondition,
-                                                                   Option<Func<T, bool>> exclusionFunction = default)
+                                                                   Option<Predicate<T>> nodeFilter = default)
         {
             List<Path<T>> result = new();
-            ShortestPath(graph, start, endCondition, output => { result.Add(output); return true; }, exclusionFunction);
+            ShortestPath(graph, start, endCondition, output => { result.Add(output); return true; }, nodeFilter);
             return result;
         }
     }
