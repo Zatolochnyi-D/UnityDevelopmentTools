@@ -58,9 +58,9 @@ namespace DenZ.DevelopmentTools.Graphs
         }
 
         public static Option<Path<T>> ShortestPath<T>(IGraph<T> graph,
-                                                             T start,
-                                                             T end,
-                                                             Option<Predicate<T>> nodeFilter = default)
+                                                      T start,
+                                                      T end,
+                                                      Option<Predicate<T>> nodeFilter = default)
         {
             var result = Option.None<Path<T>>();
             (bool, bool) output(Path<T> output)
@@ -73,9 +73,9 @@ namespace DenZ.DevelopmentTools.Graphs
         }
 
         public static Option<Path<T>> ShortestPath<T>(IGraph<T> graph,
-                                                             T start,
-                                                             Predicate<T> endCondition,
-                                                             Option<Predicate<T>> nodeFilter = default)
+                                                      T start,
+                                                      Predicate<T> endCondition,
+                                                      Option<Predicate<T>> nodeFilter = default)
         {
             var result = Option.None<Path<T>>();
             (bool, bool) output(Path<T> output)
@@ -88,9 +88,9 @@ namespace DenZ.DevelopmentTools.Graphs
         }
 
         public static IEnumerable<Path<T>> ShortestPaths<T>(IGraph<T> graph,
-                                                                   T start,
-                                                                   IEnumerable<T> ends,
-                                                                   Option<Predicate<T>> nodeFilter = default)
+                                                            T start,
+                                                            IEnumerable<T> ends,
+                                                            Option<Predicate<T>> nodeFilter = default)
         {
             List<Path<T>> result = new();
             (bool, bool) output(Path<T> output)
@@ -103,9 +103,9 @@ namespace DenZ.DevelopmentTools.Graphs
         }
 
         public static IEnumerable<Path<T>> ShortestPaths<T>(IGraph<T> graph,
-                                                                   T start,
-                                                                   Predicate<T> endCondition,
-                                                                   Option<Predicate<T>> nodeFilter = default)
+                                                            T start,
+                                                            Predicate<T> endCondition,
+                                                            Option<Predicate<T>> nodeFilter = default)
         {
             List<Path<T>> result = new();
             (bool, bool) output(Path<T> output)
