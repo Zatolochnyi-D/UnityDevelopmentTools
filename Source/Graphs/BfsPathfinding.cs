@@ -9,8 +9,8 @@ namespace DenZ.DevelopmentTools.Graphs
     {
         public static void ShortestPath<T>(IGraph<T> graph,
                                            T start,
-                                           Func<T, bool> endValidationFunction,
-                                           Func<Path<T>, bool> outputFunction,
+                                           Predicate<T> endValidationFunction,
+                                           Func<Path<T>, (bool doContinue, bool doReturn)> outputFunction,
                                            Option<Predicate<T>> nodeFilter = default)
         {
             var keysToVisit = new Queue<T>();
@@ -36,7 +36,10 @@ namespace DenZ.DevelopmentTools.Graphs
                     }
                     var from = tailKey;
                     var path = new Path<T>(from, to, fullPath);
-                    if (!outputFunction(path))
+                    var (doContinue, doReturn) = outputFunction(path);
+                    if (doContinue)
+                        continue;
+                    if (doReturn)
                         return;
                 }
 
@@ -60,17 +63,27 @@ namespace DenZ.DevelopmentTools.Graphs
                                                              Option<Predicate<T>> nodeFilter = default)
         {
             var result = Option.None<Path<T>>();
-            ShortestPath(graph, start, key => end.Equals(key), output => { result = Option.Some(output); return false; }, nodeFilter);
+            (bool, bool) output(Path<T> output)
+            {
+                result = Option.Some(output);
+                return (false, true);
+            }
+            ShortestPath(graph, start, key => end.Equals(key), output, nodeFilter);
             return result;
         }
 
         public static Option<Path<T>> ShortestPath<T>(IGraph<T> graph,
                                                              T start,
-                                                             Func<T, bool> endCondition,
+                                                             Predicate<T> endCondition,
                                                              Option<Predicate<T>> nodeFilter = default)
         {
             var result = Option.None<Path<T>>();
-            ShortestPath(graph, start, endCondition, output => { result = Option.Some(output); return false; }, nodeFilter);
+            (bool, bool) output(Path<T> output)
+            {
+                result = Option.Some(output);
+                return (false, true);
+            }
+            ShortestPath(graph, start, endCondition, output, nodeFilter);
             return result;
         }
 
@@ -80,17 +93,27 @@ namespace DenZ.DevelopmentTools.Graphs
                                                                    Option<Predicate<T>> nodeFilter = default)
         {
             List<Path<T>> result = new();
-            ShortestPath(graph, start, ends.Contains, output => { result.Add(output); return true; }, nodeFilter);
+            (bool, bool) output(Path<T> output)
+            {
+                result.Add(output);
+                return (false, false);
+            }
+            ShortestPath(graph, start, ends.Contains, output, nodeFilter);
             return result;
         }
 
         public static IEnumerable<Path<T>> ShortestPaths<T>(IGraph<T> graph,
                                                                    T start,
-                                                                   Func<T, bool> endCondition,
+                                                                   Predicate<T> endCondition,
                                                                    Option<Predicate<T>> nodeFilter = default)
         {
             List<Path<T>> result = new();
-            ShortestPath(graph, start, endCondition, output => { result.Add(output); return true; }, nodeFilter);
+            (bool, bool) output(Path<T> output)
+            {
+                result.Add(output);
+                return (false, false);
+            }
+            ShortestPath(graph, start, endCondition, output, nodeFilter);
             return result;
         }
     }
