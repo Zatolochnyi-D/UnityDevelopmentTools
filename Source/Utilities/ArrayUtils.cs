@@ -12,28 +12,22 @@ namespace DenZ.DevelopmentTools.Utilities
             return array;
         }
 
-        public static T[] Init<T>(int length, Func<T> factory)
-        {
-            return Init(length, (_) => factory());
-        }
+        public static T[] Init<T>(int length, Func<T> factory) => Init(length, _ => factory());
 
-        public static T[] Init<T>(int length, T value)
-        {
-            return Init(length, (_) => value);
-        }
+        public static T[] Init<T>(int length, T value) => Init(length, _ => value);
+        
 
-        public static T[,] Init<T>(int width, int height, Func<T> factory)
+        public static T[,] Init<T>(int width, int height, Func<int, int, T> factory)
         {
             var matrix = new T[height, width];
             for (var y = 0; y < height; y++)
                 for (var x = 0; x < width; x++)
-                    matrix[y, x] = factory();
+                    matrix[x, y] = factory(x, y);
             return matrix;
         }
 
-        public static T[,] Init<T>(int width, int height, T value)
-        {
-            return Init(width, height, () => value);
-        }
+        public static T[,] Init<T>(int width, int height, Func<T> factory) => Init(width, height, (_, _) => factory());
+
+        public static T[,] Init<T>(int width, int height, T value) => Init(width, height, () => value);
     }
 }
