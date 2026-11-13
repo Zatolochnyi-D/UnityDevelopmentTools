@@ -12,6 +12,12 @@ namespace DenZ.DevelopmentTools.Di
             return container.Bind<T>();
         }
 
+        public static ConcreteIdBinderGeneric<T> BindPlainDisposable<T>(this DiContainer container) where T : IDisposable
+        {
+            container.Bind<IDisposable>().To<T>().FromResolve();
+            return container.Bind<T>();
+        }
+
         public static void BindMonoBehaviourService<T>(this DiContainer container) where T : Component
         {
             container.Bind<T>()
