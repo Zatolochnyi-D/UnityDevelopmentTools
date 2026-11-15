@@ -21,6 +21,18 @@ namespace DenZ.DevelopmentTools.Monads
         public static T ReadOrThrow<T>(this Option<T> option, Func<Exception> exceptionFactory) => option.IsSome ? option.ValueUnsafe : throw exceptionFactory();
 
         public static T ReadOrNew<T>(this Option<T> option) where T : new() => option.IsSome ? option.ValueUnsafe : new();
+
+        public static void ThrowIfSome<T>(this Option<T> option, Func<Exception> exceptionFactory)
+        {
+            if (option.IsSome)
+                throw exceptionFactory();
+        }
+
+        public static void ThrowIfNone<T>(this Option<T> option, Func<Exception> exceptionFactory)
+        {
+            if (option.IsNone)
+                throw exceptionFactory();
+        }
         #endregion
 
 
