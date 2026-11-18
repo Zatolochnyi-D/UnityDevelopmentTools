@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DenZ.DevelopmentTools.Graphs
 {
@@ -7,6 +8,7 @@ namespace DenZ.DevelopmentTools.Graphs
         public TKey From { get; }
         public TKey To { get; }
         public IEnumerable<TKey> FullPath { get; }
+        public IEnumerable<TKey> PathExcludingFrom => FullPath.Skip(1);
 
         public Path(TKey from, TKey to, IEnumerable<TKey> fullPath)
         {
