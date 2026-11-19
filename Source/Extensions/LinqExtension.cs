@@ -40,5 +40,11 @@ namespace DenZ.DevelopmentTools.Extensions
                 for (int x = 0; x < matrix.GetLength(0); x++)
                     yield return matrix[x, y];
         }
+
+        public static TState Fold<TItem, TState>(this IEnumerable<TItem> collection, TState initialState, Func<TItem, TState, TState> foldingFunc)
+        {
+            collection.ForEach(x => initialState = foldingFunc(x, initialState));
+            return initialState;
+        }
     }
 }
